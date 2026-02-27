@@ -6,7 +6,7 @@
 
 ## Proje Hakkında
 
-![Ürün Tanıtım Görseli][Product.jpeg]
+![Ürün Tanıtım Görseli](Product.jpeg)
 
 **Proje Tanımı:** 
 Tüketicilere ve e-ticaret profesyonellerine, piyasadaki anlık fiyat değişimlerini kaçırmadan en doğru zamanda aksiyon alma imkanı sunar. Platformumuz; çeşitli e-ticaret pazaryerlerinden ve kategorilerden (Go ve Redis altyapısıyla) saniyesi saniyesine veri çekerek, Redis ve Kafka/RabbitMQ tabanlı asenkron bir mimari üzerinden fiyat dalgalanmalarını analiz eder.
