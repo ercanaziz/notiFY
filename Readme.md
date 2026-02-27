@@ -6,18 +6,19 @@
 
 ## Proje Hakkında
 
-![Ürün Tanıtım Görseli]
+![Ürün Tanıtım Görseli][Product.jpeg]
 
 **Proje Tanımı:** 
-> Projenin ne iş yaptığını anlatan bir paragraflık tanıtım metni buraya yazılacaktır.
+Tüketicilere ve e-ticaret profesyonellerine, piyasadaki anlık fiyat değişimlerini kaçırmadan en doğru zamanda aksiyon alma imkanı sunar. Platformumuz; çeşitli e-ticaret pazaryerlerinden ve kategorilerden (Go ve Redis altyapısıyla) saniyesi saniyesine veri çekerek, Redis ve Kafka/RabbitMQ tabanlı asenkron bir mimari üzerinden fiyat dalgalanmalarını analiz eder.
+Gelişmiş mikroservis yapısı sayesinde, kullanıcıların belirlediği limitlerin altına inen fiyatlar anında tespit edilir ve entegre bildirim sistemleriyle ( E-mail) kullanıcıya "satın alma sinyali" olarak iletilir. Amacımız, manuel fiyat takibi zahmetini ortadan kaldırarak, veriye dayalı alışverişi herkes için erişilebilir ve dinamik bir deneyime dönüştürmektir.
 
 **Örnek:** 
 
 **Proje Kategorisi:** 
-> Projenin hangi alanda yapıldığını belirten bir kategori. Örnek: E-Ticaret, Sosyal Medya vb.
+Finans Teknolojileri (FinTech) / Veri Madenciliği / Akıllı Bildirim Sistemleri
 
 **Referans Uygulama:** 
-> [Örnek Referans Uygulama](https://example.com)
+> [Örnek Referans Uygulama]Cimri, Akakçe
 
 ---
 
