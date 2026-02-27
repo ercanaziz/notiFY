@@ -8,12 +8,11 @@ Bu dokümanda, mobil uygulamanın REST API ile iletişimini sağlayan backend en
 
 ## Grup Üyelerinin Mobil Backend Görevleri
 
-1. [Ali Tutar'ın Mobil Backend Görevleri](Ali-Tutar/Ali-Tutar-Mobil-Backend-Gorevleri.md)
-2. [Grup Üyesi 2'nin Mobil Backend Görevleri](Grup-Uyesi-2/Grup-Uyesi-2-Mobil-Backend-Gorevleri.md)
-3. [Grup Üyesi 3'ün Mobil Backend Görevleri](Grup-Uyesi-3/Grup-Uyesi-3-Mobil-Backend-Gorevleri.md)
-4. [Grup Üyesi 4'ün Mobil Backend Görevleri](Grup-Uyesi-4/Grup-Uyesi-4-Mobil-Backend-Gorevleri.md)
-5. [Grup Üyesi 5'in Mobil Backend Görevleri](Grup-Uyesi-5/Grup-Uyesi-5-Mobil-Backend-Gorevleri.md)
-6. [Grup Üyesi 6'nın Mobil Backend Görevleri](Grup-Uyesi-6/Grup-Uyesi-6-Mobil-Backend-Gorevleri.md)
+1. [Ercan Aziz'in Mobil Backend Görevleri](Ercan-Aziz-Mobil-Backend-Gorevleri.md)
+2. [Sema Durgut'un Mobil Backend Görevleri](Sema-Durgut-Mobil-Backend-Gorevleri.md)
+3. [Dogukan Dursoy'un Mobil Backend Görevleri](Dogukan-Dursoy-Mobil-Backend-Gorevleri.md)
+4. [Betül Erkoç'un Mobil Backend Görevleri](Betul-Erkoc-Mobil-Backend-Gorevleri.md)
+5. [Nisanur Sütçü'nün Mobil Backend Görevleri](Nisanur-Sutcu-Mobil-Backend-Gorevleri.md)
 
 ---
 
