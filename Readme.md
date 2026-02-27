@@ -6,7 +6,7 @@
 
 ## Proje Hakkında
 
-![Ürün Tanıtım Görseli](Product.png)
+![Ürün Tanıtım Görseli]
 
 **Proje Tanımı:** 
 > Projenin ne iş yaptığını anlatan bir paragraflık tanıtım metni buraya yazılacaktır.
@@ -30,8 +30,7 @@
 
 ## Proje Ekibi
 
-**Grup Adı:** 
-> Belirlediğiniz grup adı buraya yazılacaktır.
+**HERMES** 
 
 **Ekip Üyeleri:** 
 - Ercan Aziz
