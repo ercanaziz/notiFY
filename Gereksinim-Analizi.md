@@ -38,8 +38,8 @@ Tüm gereksinimlerimizi çıkardıktan sonra beraber tartıştık ve son gereksi
 
 # Gereksinim Dağılımları
 
-1. [Ercan Aziz'in Gereksinimleri](Ercan-Aziz-Gereksinimler.md)
-2. [Sema Durgut'un Gereksinimleri](Sema-Durgut-Gereksinimler.md)
-3. [Doğukan Dursoy'un Gereksinimleri](Dogukan-Dursoy-Gereksinimler.md)
-4. [Betül Erkoç'un Gereksinimleri](Betul-Erkoc-Gereksinimler.md)
+1. [Ercan Aziz'in Gereksinimleri](./Ercan-Aziz/Ercan-Aziz-Gereksinimler.md)
+2. [Sema Durgut'un Gereksinimleri](./Sema-Durgut/Sema-Durgut-Gereksinimler.md)
+3. [Doğukan Dursoy'un Gereksinimleri](./Dogukan-Dursoy/Dogukan-Dursoy-Gereksinimler.md)
+4. [Betül Erkoç'un Gereksinimleri](./Betul-Erkoc/Betul-Erkoc-Gereksinimler.md)
 5. [Nisanur Sütçü'nün Gereksinimleri](./Nisanur-Sutcu/Nisanur-Sutcu-Gereksinimler.md)
