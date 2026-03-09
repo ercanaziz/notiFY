@@ -8,11 +8,11 @@ Bu dokümanda, web uygulamasının kullanıcı arayüzü (UI) ve kullanıcı den
 
 ## Grup Üyelerinin Web Frontend Görevleri
 
-1. [Ercan Aziz'in Web Frontend Görevleri](Ercan-Aziz-Web-Frontend-Gorevleri.md)
-2. [Sema Durgut'un Web Frontend Görevleri](Sema-Durgut-Frontend-Gorevleri.md)
-3. [Dogukan Dursoy'un Web Frontend Görevleri](Dogukan-Dursoy-Frontend-Gorevleri.md)
-4. [Betül Erkoç'un Web Frontend Görevleri](Betul-Erkoc-Frontend-Gorevleri.md)
-5. [Nisanur Sütçü'nün Web Frontend Görevleri](Nisanur-Sutcu-Frontend-Gorevleri.md)
+1. [Ercan Aziz'in Web Frontend Görevleri](./Ercan-Aziz/Ercan-Aziz-Web-Frontend-Gorevleri.md)
+2. [Sema Durgut'un Web Frontend Görevleri](./Sema-Durgut/Sema-Durgut-Frontend-Gorevleri.md)
+3. [Dogukan Dursoy'un Web Frontend Görevleri](./Dogukan-Dursoy/Dogukan-Dursoy-Frontend-Gorevleri.md)
+4. [Betül Erkoç'un Web Frontend Görevleri](./Betul-Erkoc/Betul-Erkoc-Frontend-Gorevleri.md)
+5. [Nisanur Sütçü'nün Web Frontend Görevleri](./Nisanur-Sutcu/Nisanur-Sutcu-Frontend-Gorevleri.md)
 
 ---
 

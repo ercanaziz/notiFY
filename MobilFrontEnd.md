@@ -6,11 +6,11 @@ Bu dokümanda, mobil uygulamanın kullanıcı arayüzü (UI) ve kullanıcı dene
 
 ## Grup Üyelerinin Mobil Frontend Görevleri
 
-1. [Ercan Aziz'in Mobil Frontend Görevleri](Ercan-Aziz-Mobil-Frontend-Gorevleri.md)
-2. [Sema Durgut'un Mobil Frontend Görevleri](Sema-Durgut-Mobil-Frontend-Gorevleri.md)
-3. [Dogukan Dursoy'un Mobil Frontend Görevleri](Dogukan-Dursoy-Mobil-Frontend-Gorevleri.md)
-4. [Betül Erkoç'un Mobil Frontend Görevleri](Betul-Erkoc-Mobil-Frontend-Gorevleri.md)
-5. [Nisanur Sütçü'nün Mobil Frontend Görevleri](Nisanur-Sutcu-Mobil-Frontend-Gorevleri.md)
+1. [Ercan Aziz'in Mobil Frontend Görevleri](./Ercan-Aziz/Ercan-Aziz-Mobil-Frontend-Gorevleri.md)
+2. [Sema Durgut'un Mobil Frontend Görevleri](./Sema-Durgut/Sema-Durgut-Mobil-Frontend-Gorevleri.md)
+3. [Dogukan Dursoy'un Mobil Frontend Görevleri](./Dogukan-Dursoy/Dogukan-Dursoy-Mobil-Frontend-Gorevleri.md)
+4. [Betül Erkoç'un Mobil Frontend Görevleri](./Betul-Erkoc/Betul-Erkoc-Mobil-Frontend-Gorevleri.md)
+5. [Nisanur Sütçü'nün Mobil Frontend Görevleri](./Nisanur-Sutcu/Nisanur-Sutcu-Mobil-Frontend-Gorevleri.md)
 
 ---
 
