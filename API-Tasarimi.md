@@ -2,281 +2,506 @@
 
 **OpenAPI Spesifikasyon Dosyası:** [lamine.yaml](lamine.yaml)
 
-Bu doküman, OpenAPI Specification (OAS) 3.0 standardına göre hazırlanmış örnek bir API tasarımını içermektedir.
+Bu doküman, HERMES Ekibi tarafından geliştirilen "Fiyat Takip ve Akıllı Alarm Sistemi" projesi için OpenAPI Specification (OAS) 3.0 standardına göre hazırlanmış örnek bir API tasarımını içermektedir.
 
 ## OpenAPI Specification
 
 ```yaml
 openapi: 3.0.3
 info:
-  title: E-Ticaret API
-  description: |
-    E-ticaret platformu için RESTful API.
-    
-    ## Özellikler
-    - Kullanıcı yönetimi
-    - Ürün katalog yönetimi
-    - Sipariş işlemleri
-    - JWT tabanlı kimlik doğrulama
+  title: Fiyat Takip ve Akıllı Bildirim API'si
   version: 1.0.0
+  description: >
+    Tüketicilere ve e-ticaret profesyonellerine, piyasadaki anlık fiyat değişimlerini 
+    kaçırmadan en doğru zamanda aksiyon alma imkanı sunar. Redis ve Kafka/RabbitMQ 
+    tabanlı asenkron mimari üzerinden fiyat dalgalanmalarını analiz eder ve kullanıcıların 
+    belirlediği limitlerin altına inen fiyatları "satın alma sinyali" olarak iletir.
   contact:
-    name: API Destek Ekibi
-    email: api-support@yazmuh.com
-    url: https://api.yazmuh.com/support
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    name: HERMES
 
 servers:
-  - url: https://api.yazmuh.com/v1
-    description: Production server
-  - url: https://staging-api.yazmuh.com/v1
-    description: Staging server
-  - url: http://localhost:3000/v1
-    description: Development server
+  - url: https://api.fiyattakip.com
+    description: Production Sunucusu
+  - url: https://staging.fiyattakip.com
+    description: Test Sunucusu (Staging)
+  - url: http://localhost:8080
+    description: Local Geliştirme (Go/Fiber veya Gin)
 
 tags:
-  - name: users
-    description: Kullanıcı yönetimi işlemleri
-  - name: products
-    description: Ürün katalog işlemleri
-  - name: orders
-    description: Sipariş işlemleri
-  - name: auth
-    description: Kimlik doğrulama işlemleri
+  - name: Auth & Users
+    description: Kullanıcı doğrulama ve profil işlemleri (Betül Erkoç)
+  - name: Products & Watchlist
+    description: Ürün arama, filtreleme ve takip listesi yönetimi (Nisanur Sütçü)
+  - name: Alerts & Notifications
+    description: Fiyat alarmı oluşturma, yönetimi ve anlık bildirimler (Doğukan Dursoy)
+  - name: Price Analytics
+    description: Fiyat geçmişi, grafikleri ve karşılaştırmalar (Sema Durgut)
+  - name: Core Lists & Plans
+    description: Filtreleme, sıralama, abonelik ve geri bildirim (Ercan Aziz)
+
+security:
+  - BearerAuth: []
 
 paths:
+  # ==========================================
+  # AUTH & USERS (Betül Erkoç)
+  # ==========================================
   /auth/register:
     post:
-      tags:
-        - auth
-      summary: Yeni kullanıcı kaydı
-      description: Sisteme yeni bir kullanıcı kaydeder
+      tags: [Auth & Users]
+      summary: Yeni Kullanıcı Kaydı
       operationId: registerUser
+      description: Kullanıcı bilgilerini sisteme kaydeder ve hesap oluşturur.
+      security: [] 
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegistration'
-            examples:
-              example1:
-                summary: Örnek kullanıcı kaydı
-                value:
-                  email: kullanici@example.com
-                  password: Guvenli123!
-                  firstName: Ahmet
-                  lastName: Yılmaz
+              $ref: '#/components/schemas/RegisterInput'
       responses:
-        '201':
-          description: Kullanıcı başarıyla oluşturuldu
+        "201": { description: Kullanıcı başarıyla oluşturuldu }
+        "400": 
+          description: Geçersiz veri girişi
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          description: Email adresi zaten kullanımda
+                $ref: '#/components/schemas/Error'
+  
+  /auth/login:
+    post:
+      tags: [Auth & Users]
+      summary: Kullanıcı Girişi
+      operationId: loginUser
+      description: Kimlik bilgilerini doğrular ve JWT erişim token'ı üretir.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        "200": 
+          description: Giriş başarılı, token üretildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1Ni..."
+  /auth/logout:
+    post:
+      tags: [Auth & Users]
+      summary: Oturum Kapatma
+      operationId: logoutUser
+      security:
+        - BearerAuth: []
+      responses:
+        "200": { description: Başarıyla çıkış yapıldı }   
+
+  /user/profile:
+    put:
+      tags: [Auth & Users]
+      summary: Profil Bilgilerini Güncelleme
+      operationId: updateProfile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateInput'
+      responses:
+        "200": { description: Profil başarıyla güncellendi }
+        "401": { $ref: '#/components/responses/Unauthorized' }
+    delete:
+      tags: [Auth & Users]
+      summary: Hesap Silme
+      operationId: deleteAccount
+      security:
+        - BearerAuth: []
+      responses:
+        "204": { description: Kullanıcı hesabı kalıcı olarak silindi }
+        "401": { $ref: '#/components/responses/Unauthorized' }
+
+  /user/password:
+    patch:
+      tags: [Auth & Users]
+      summary: Şifre Değiştirme
+      operationId: changePassword
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordUpdateInput'
+      responses:
+        "200": { description: Şifre başarıyla güncellendi }
+        "400": { description: Geçersiz veri }
+        "401": { description: Yetkisiz erişim }
+
+  # ==========================================
+  # PRODUCTS & WATCHLIST (Nisanur Sütçü & Ercan Aziz)
+  # ==========================================
+  
+  /products:
+    get:
+      summary: Ürünleri listele, filtrele ve sırala
+      description: Marka filtresi ile fiyat/tarih sıralama seçeneklerini bir arada sunar.
+      tags:
+        - Products
+      parameters:
+        - name: brand
+          in: query
+          description: Markaya göre filtrele.
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: Sıralama kriteri.
+          schema:
+            type: string
+            enum: [price, createdAt]
+        - name: order
+          in: query
+          description: Sıralama yönü.
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+      responses:
+        '200':
+          description: Filtrelenmiş ve sıralanmış ürün listesi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /watchlist:
+    get:
+      tags:
+        - Products
+      summary: Ürün listesi
+      description: Kullanıcının takip ettiği ürünleri listeler
+      operationId: listProducts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Ürünler başarıyla listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /watchlist/add:
+    post:
+      tags:
+        - Products
+      summary: Ürün ekleme
+      description: Bir ürünü takip listesine ekler
+      operationId: addProduct
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Ürün başarıyla eklendi
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /products/search:
+    get:
+      tags:
+        - Products
+      summary: Ürün arama
+      description: Anahtar kelime ile ürün arama
+      operationId: searchProducts
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Aranacak ürün adı veya anahtar kelime
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Arama sonuçları
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+
+  /products/category:
+    get:
+      tags:
+        - Categories
+      summary: Kategori listesi
+      description: Ürün kategorilerini listeler
+      operationId: listCategories
+      responses:
+        "200":
+          description: Kategoriler başarıyla listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+  /products/categories:
+    get:
+      summary: Kategoriye göre ürünleri getir
+      tags:
+        - Products
+      parameters:
+        - name: categoryName
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "Elektronik"
+      responses:
+        '200':
+          description: Kategorize edilmiş ürün listesi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /products/trending:
+    get:
+      tags:
+        - Products
+      summary: Favori ürünler
+      description: En sık kontrol edilen ürünleri listeler
+      operationId: trendProducts
+      responses:
+        "200":
+          description: Trend ürünler listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /watchlists/{id}:
+    delete:
+      tags:
+        - Products
+      summary: Ürün silme
+      description: Takip edilen ürünü listeden kaldırır
+      operationId: deleteProduct
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Silinecek ürün ID
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Ürün başarıyla silindi
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ==========================================
+  # ALERTS & NOTIFICATIONS (Doğukan Dursoy)
+  # ==========================================
+  /alerts:
+    get:
+      tags: [Alerts & Notifications]
+      summary: Aktif Alarmları Listeleme
+      operationId: listActiveAlerts
+      responses:
+        "200":
+          description: Kullanıcının aktif fiyat alarmları listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alert'
+        "401":
+          description: Yetkisiz erişim (Kullanıcı giriş yapmamış)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Alerts & Notifications]
+      summary: Fiyat Alarmı Oluşturma
+      description: Belirli bir ürün için hedef fiyat belirlenir. Kafka/RabbitMQ kuyruğuna dinleyici olarak eklenir.
+      operationId: createPriceAlert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertInput'
+      responses:
+        "201":
+          description: Alarm başarıyla kuruldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        "400":
+          description: Geçersiz veya eksik veri gönderildi (örn. productId eksik)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Yetkisiz erişim
+
+  /alerts/{alertId}:
+    put:
+      tags: [Alerts & Notifications]
+      summary: Alarm Durumu Güncelleme
+      description: Alarmı aktif/pasif duruma getirme veya hedef fiyatı güncelleme.
+      operationId: updateAlertStatus
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isActive: { type: boolean }
+                targetPrice: { type: number, format: float }
+      responses:
+        "200": 
+          description: Alarm güncellendi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        "400":
+          description: Geçersiz veri formatı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Güncellenmek istenen alarm bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Alerts & Notifications]
+      summary: Alarm Silme
+      operationId: deleteAlert
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204": 
+          description: Alarm başarıyla silindi (İçerik dönmez)
+        "404":
+          description: Silinmek istenen alarm zaten yok
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /auth/login:
+  /notify/email:
     post:
-      tags:
-        - auth
-      summary: Kullanıcı girişi
-      description: Email ve şifre ile giriş yapar, JWT token döner
-      operationId: loginUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginCredentials'
+      tags: [Alerts & Notifications]
+      summary: E-posta Bildirimi Gönderme
+      description: Asenkron worker'lar tarafından fiyat düştüğünde tetiklenen iç servis uç noktası.
+      operationId: sendEmailNotification
       responses:
-        '200':
-          description: Giriş başarılı
+        "202": 
+          description: E-posta başarıyla kuyruğa eklendi
+        "500":
+          description: Kuyruk servisi (RabbitMQ/Kafka) bağlantı hatası
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthToken'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                $ref: '#/components/schemas/Error'
 
-  /users:
-    get:
-      tags:
-        - users
-      summary: Kullanıcı listesi
-      description: Sistemdeki tüm kullanıcıları listeler (sayfalama ile)
-      operationId: listUsers
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/LimitParam'
-        - name: role
-          in: query
-          description: Kullanıcı rolüne göre filtrele
-          schema:
-            type: string
-            enum: [admin, user, guest]
-      responses:
-        '200':
-          description: Başarılı
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserList'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-
-  /users/{userId}:
-    get:
-      tags:
-        - users
-      summary: Kullanıcı detayı
-      description: Belirli bir kullanıcının detay bilgilerini getirir
-      operationId: getUserById
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/UserIdParam'
-      responses:
-        '200':
-          description: Başarılı
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    
-    put:
-      tags:
-        - users
-      summary: Kullanıcı güncelle
-      description: Kullanıcı bilgilerini günceller
-      operationId: updateUser
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/UserIdParam'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserUpdate'
-      responses:
-        '200':
-          description: Kullanıcı başarıyla güncellendi
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    
-    delete:
-      tags:
-        - users
-      summary: Kullanıcı sil
-      description: Kullanıcıyı sistemden siler
-      operationId: deleteUser
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/UserIdParam'
-      responses:
-        '204':
-          description: Kullanıcı başarıyla silindi
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
-  /products:
-    get:
-      tags:
-        - products
-      summary: Ürün listesi
-      description: Tüm ürünleri listeler
-      operationId: listProducts
-      parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/LimitParam'
-        - name: category
-          in: query
-          description: Kategoriye göre filtrele
-          schema:
-            type: string
-        - name: minPrice
-          in: query
-          description: Minimum fiyat
-          schema:
-            type: number
-            format: float
-        - name: maxPrice
-          in: query
-          description: Maximum fiyat
-          schema:
-            type: number
-            format: float
-      responses:
-        '200':
-          description: Başarılı
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductList'
-    
+  /notify/push:
     post:
-      tags:
-        - products
-      summary: Yeni ürün ekle
-      description: Sisteme yeni bir ürün ekler
-      operationId: createProduct
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductCreate'
+      tags: [Alerts & Notifications]
+      summary: Anlık Bildirim (Push) Gönderme
+      operationId: sendPushNotification
       responses:
-        '201':
-          description: Ürün başarıyla oluşturuldu
+        "202": 
+          description: Push bildirim başarıyla kuyruğa eklendi
+        "500":
+          description: Sunucu içi hata
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+                $ref: '#/components/schemas/Error'
 
-  /products/{productId}:
+  # ==========================================
+  # PRICE ANALYTICS (Sema Durgut)
+  # ==========================================
+  /products/{id}/history:
     get:
-      tags:
+      tags: 
         - products
-      summary: Ürün detayı
-      description: Belirli bir ürünün detay bilgilerini getirir
-      operationId: getProductById
+      summary: Ürün Fiyat Geçmişi Listeleme
+      description: Seçili ürünün geçmiş tarihlerdeki fiyat kayıtlarını liste olarak sunar.
+      operationId: getPriceHistory
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParam'
+      responses:
+        '200':
+          description: Fiyat geçmişi başarıyla getirildi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceHistory'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /products/{id}/lowest-price:
+    get:
+      tags: 
+        - products
+      summary: Tüm Zamanların En Düşük Fiyatı
+      description: Ürünün tüm zamanlardaki en düşük fiyat bilgisini kullanıcıya gösterir.
+      operationId: getLowestPrice
       parameters:
         - $ref: '#/components/parameters/ProductIdParam'
       responses:
@@ -285,512 +510,574 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/PriceInfo'
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /orders:
+  /products/compare:
     get:
-      tags:
-        - orders
-      summary: Sipariş listesi
-      description: Kullanıcının siparişlerini listeler
-      operationId: listOrders
-      security:
-        - bearerAuth: []
+      tags: 
+        - products
+      summary: Mağazalar Arası Fiyat Karşılaştırması
+      description: Aynı ürünün farklı e-ticaret sitelerindeki fiyatlarını yan yana getirir.
+      operationId: compareStores
       parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/LimitParam'
+        - name: query
+          in: query
+          description: Karşılaştırılacak ürünün adı, modeli veya SKU kodu.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: Başarılı
+          description: Karşılaştırma listesi başarıyla oluşturuldu.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderList'
-    
-    post:
+                $ref: '#/components/schemas/ComparisonList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /products/{id}/discount-rate:
+    get:
+      tags: 
+        - products
+      summary: İndirim Oranı Analizi
+      description: Ürünün piyasa ortalamasına ve geçmiş fiyatlarına göre kârlılık oranını hesaplar.
+      operationId: calculateDiscountRate
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParam'
+      responses:
+        '200':
+          description: Analiz tamamlandı.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountAnalysis'
+
+  /products/{id}/forecast:
+    get:
+      tags: 
+        - products
+      summary: Yapay Zeka Destekli Fiyat Tahmini
+      description: Mevcut trendlere göre fiyatın gelecekteki olası yönünü raporlar (AI Destekli).
+      operationId: getPriceForecast
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParam'
+      responses:
+        '200':
+          description: Tahmin raporu başarıyla oluşturuldu.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastData'
+        '500':
+          description: Tahmin motoru hatası veya yetersiz veri.
+  /products/filter/color:
+    get:
       tags:
-        - orders
-      summary: Yeni sipariş oluştur
-      description: Yeni bir sipariş oluşturur
-      operationId: createOrder
-      security:
-        - bearerAuth: []
+        - products
+      summary: Renk Bazlı Ürün Filtreleme
+      description: Kullanıcıların ürünleri belirli renk seçeneklerine göre süzerek listelemesi için kullanılır.
+      operationId: getProductsByColor
+      parameters:
+        - name: color
+          in: query
+          description: Filtrelenecek renk (örn. Siyah, Kırmızı, Space Gray)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtrelenmiş liste döndürüldü.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+  /products/{productId}/chart-data:
+    get:
+      tags: 
+        - products
+      summary: Grafik İçin Zaman Serisi Verisi
+      description: Grafik çizimi için zaman serisi tabanlı fiyat verilerini hazırlar.
+      operationId: getChartData
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParam'
+      responses:
+        '200':
+          description: Grafik verisi başarıyla hazırlandı.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChartData'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==========================================
+  # SYSTEM & MISC (Ercan Aziz)
+  # ==========================================
+  /support/feedback:
+    post:
+      summary: Kullanıcı geri bildirimi oluştur
+      description: Teknik sorunları veya önerileri yönetime iletir.
+      tags:
+        - Support
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrderCreate'
+              $ref: '#/components/schemas/Feedback'
       responses:
         '201':
-          description: Sipariş başarıyla oluşturuldu
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
+          description: Geri bildirim başarıyla alındı.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /subscriptions:
+    put:
+      summary: Abonelik planı limitlerini güncelle
+      description: Kullanıcıların takip edebileceği ürün limitlerini belirler (Admin yetkisi gerektirir).
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionPlan'
+      responses:
+        '200':
+          description: Plan başarıyla güncellendi.
+        '403':
+          description: Yetkisiz erişim.
+
+
+
 
 components:
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT token ile kimlik doğrulama
-
+  
   parameters:
-    UserIdParam:
-      name: userId
-      in: path
-      required: true
-      description: Kullanıcı ID'si
-      schema:
-        type: string
-        format: uuid
-    
     ProductIdParam:
       name: productId
       in: path
+      description: İşlem yapılacak ürünün benzersiz ID değeri.
       required: true
-      description: Ürün ID'si
       schema:
         type: string
         format: uuid
-    
-    PageParam:
-      name: page
-      in: query
-      description: Sayfa numarası
-      schema:
-        type: integer
-        minimum: 1
-        default: 1
-    
-    LimitParam:
-      name: limit
-      in: query
-      description: Sayfa başına kayıt sayısı
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
+      
 
   schemas:
-    User:
+    Feedback:
       type: object
       required:
-        - id
-        - email
-        - firstName
-        - lastName
-        - role
-        - createdAt
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Kullanıcı benzersiz kimliği
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        email:
-          type: string
-          format: email
-          description: Kullanıcı email adresi
-          example: "kullanici@example.com"
-        firstName:
-          type: string
-          description: Ad
-          example: "Ahmet"
-        lastName:
-          type: string
-          description: Soyad
-          example: "Yılmaz"
-        role:
-          type: string
-          enum: [admin, user, guest]
-          description: Kullanıcı rolü
-          example: "user"
-        createdAt:
-          type: string
-          format: date-time
-          description: Oluşturulma tarihi
-          example: "2024-01-15T10:30:00Z"
-        updatedAt:
-          type: string
-          format: date-time
-          description: Güncellenme tarihi
-          example: "2024-01-20T14:45:00Z"
-        phone:
-          type: string
-          description: Telefon numarası
-          example: "+905551234567"
-
-    UserRegistration:
-      type: object
-      required:
-        - email
-        - password
-        - firstName
-        - lastName
-      properties:
-        email:
-          type: string
-          format: email
-          example: "kullanici@example.com"
-        password:
-          type: string
-          format: password
-          minLength: 8
-          example: "Guvenli123!"
-        firstName:
-          type: string
-          minLength: 2
-          example: "Ahmet"
-        lastName:
-          type: string
-          minLength: 2
-          example: "Yılmaz"
-
-    UserUpdate:
-      type: object
-      properties:
-        firstName:
-          type: string
-          minLength: 2
-          example: "Ahmet"
-        lastName:
-          type: string
-          minLength: 2
-          example: "Yılmaz"
-        email:
-          type: string
-          format: email
-          example: "yeniemail@example.com"
-        phone:
-          type: string
-          description: Telefon numarası
-          example: "+905551234567"
-
-    LoginCredentials:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          type: string
-          format: email
-          example: "kullanici@example.com"
-        password:
-          type: string
-          format: password
-          example: "Guvenli123!"
-
-    AuthToken:
-      type: object
-      required:
-        - token
-        - expiresIn
-        - user
-      properties:
-        token:
-          type: string
-          description: JWT access token
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        expiresIn:
-          type: integer
-          description: Token geçerlilik süresi (saniye)
-          example: 3600
-        user:
-          $ref: '#/components/schemas/User'
-
-    Product:
-      type: object
-      required:
-        - id
-        - name
-        - price
-        - category
-        - stock
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: "987e6543-e21b-12d3-a456-426614174000"
-        name:
-          type: string
-          description: Ürün adı
-          example: "Laptop"
-        description:
-          type: string
-          description: Ürün açıklaması
-          example: "15.6 inç, 16GB RAM, 512GB SSD"
-        price:
-          type: number
-          format: float
-          description: Ürün fiyatı (TL)
-          example: 25999.99
-        category:
-          type: string
-          description: Ürün kategorisi
-          example: "Elektronik"
-        stock:
-          type: integer
-          description: Stok miktarı
-          example: 50
-        imageUrl:
-          type: string
-          format: uri
-          description: Ürün görseli URL'i
-          example: "https://example.com/images/laptop.jpg"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-
-    ProductCreate:
-      type: object
-      required:
-        - name
-        - price
-        - category
-        - stock
-      properties:
-        name:
-          type: string
-          minLength: 3
-        description:
-          type: string
-        price:
-          type: number
-          format: float
-          minimum: 0
-        category:
-          type: string
-        stock:
-          type: integer
-          minimum: 0
-        imageUrl:
-          type: string
-          format: uri
-
-    Order:
-      type: object
-      required:
-        - id
         - userId
-        - items
-        - totalAmount
-        - status
-        - createdAt
+        - subject
+        - message
       properties:
-        id:
-          type: string
-          format: uuid
         userId:
+          type: integer
+        subject:
           type: string
-          format: uuid
-        items:
+        message:
+          type: string
+
+    SubscriptionPlan:
+      type: object
+      required:
+        - planType
+        - productLimit
+      properties:
+        planType:
+          type: string
+          enum: [Basic, Premium, Enterprise]
+        productLimit:
+          type: integer
+          example: 50
+
+    PriceHistory:
+      type: object
+      properties:
+        price:
+          type: number
+          format: float
+          example: 1250.50
+        currency:
+          type: string
+          example: "TRY"
+        recordedAt:
+          type: string
+          format: date-time
+          example: "2024-03-01T14:30:00Z"
+        storeName:
+          type: string
+          example: "Amazon"
+
+    ChartData:
+      type: object
+      properties:
+        labels:
           type: array
           items:
-            $ref: '#/components/schemas/OrderItem'
-        totalAmount:
-          type: number
-          format: float
-          description: Toplam tutar (TL)
-        status:
-          type: string
-          enum: [pending, processing, shipped, delivered, cancelled]
-          description: Sipariş durumu
-        shippingAddress:
-          $ref: '#/components/schemas/Address'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-
-    OrderCreate:
-      type: object
-      required:
-        - items
-        - shippingAddress
-      properties:
-        items:
+            type: string
+            format: date
+          example: ["2024-01-01", "2024-02-01", "2024-03-01"]
+        datasets:
           type: array
-          minItems: 1
           items:
             type: object
-            required:
-              - productId
-              - quantity
             properties:
-              productId:
+              label:
                 type: string
-                format: uuid
-              quantity:
-                type: integer
-                minimum: 1
-        shippingAddress:
-          $ref: '#/components/schemas/Address'
+                example: "Fiyat Trendi"
+              data:
+                type: array
+                items:
+                  type: number
+                example: [1100, 1300, 1250]
 
-    OrderItem:
+    PriceInfo:
+      type: object
+      properties:
+        lowestPrice:
+          type: number
+          example: 899.99
+        highestPrice:
+          type: number
+          example: 1450.00
+        currentPrice:
+          type: number
+          example: 1050.00
+        attainedAt:
+          type: string
+          format: date-time
+          example: "2023-11-15T09:00:00Z"
+        storeUrl:
+          type: string
+          format: uri
+          example: "https://example.com/product/123"
+
+    ComparisonList:
+      type: object
+      properties:
+        productName:
+          type: string
+          example: "iPhone 15 Pro 128GB"
+        lastUpdated:
+          type: string
+          format: date-time
+        offers:
+          type: array
+          items:
+            type: object
+            properties:
+              storeName:
+                type: string
+                example: "Hepsiburada"
+              price:
+                type: number
+                example: 72000.00
+              inStock:
+                type: boolean
+                example: true
+              url:
+                type: string
+                format: uri
+
+    DiscountAnalysis:
+      type: object
+      properties:
+        currentPrice:
+          type: number
+          example: 450.00
+        averagePrice:
+          type: number
+          example: 600.00
+        discountPercentage:
+          type: integer
+          example: 25
+        rating:
+          type: string
+          enum: [VERY_GOOD, GOOD, NEUTRAL, BAD]
+          description: Fiyatın ne kadar avantajlı olduğunu belirten etiket.
+          example: "VERY_GOOD"
+
+    ProductList:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          color:
+            type: string
+            example: "Uzay Grisi"
+          price:
+            type: number
+          imageUrl:
+            type: string
+
+    ForecastData:
       type: object
       properties:
         productId:
           type: string
-          format: uuid
-        productName:
+        prediction:
           type: string
-        quantity:
-          type: integer
-        unitPrice:
+          enum: [UP, DOWN, STABLE]
+          example: "DOWN"
+        confidenceScore:
           type: number
           format: float
-        totalPrice:
+          description: Tahminin güvenilirlik oranı (0-1 arası).
+          example: 0.85
+        estimatedPriceNextMonth:
           type: number
-          format: float
-
-    Address:
+          example: 980.00
+        aiComment:
+          type: string
+          example: "Stok verileri ve kampanya dönemleri yaklaştığı için fiyatın %5 düşmesi bekleniyor."
+    Product:
       type: object
       required:
-        - street
-        - city
-        - postalCode
-        - country
+        - _id
+        - name
+        - price
       properties:
-        street:
+        _id:
           type: string
-          example: "Atatürk Caddesi No:123"
-        city:
+          example: "prod_123"
+        name:
           type: string
-          example: "İstanbul"
-        postalCode:
+          example: "Örnek Ürün"
+        price:
+          type: number
+          example: 1999.99
+        url:
           type: string
-          example: "34000"
-        country:
+          example: "https://example.com/product"
+        brand:
           type: string
-          example: "Türkiye"
+        category:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
 
-    UserList:
+    ProductInput:
+      type: object
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        categoryId:
+          type: string
+
+    Category:
+      type: object
+      required:
+        - _id
+        - name
+      properties:
+        _id:
+          type: string
+          example: "cat_001"
+        name:
+          type: string
+          example: "Elektronik"
+    RegisterInput:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+          description: Sisteme kayıt için kullanılacak e-posta adresi.
+          example: "betul.erkoc@example.com"
+        password:
+          type: string
+          format: password
+          description: En az 8 karakterli, güvenli şifre.
+          example: "Suleyman123!"
+        firstName:
+          type: string
+          description: Kullanıcının adı.
+          example: "Betül"
+        lastName:
+          type: string
+          description: Kullanıcının soyadı.
+          example: "Erkoç"
+
+    LoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "betul.erkoc@example.com"
+        password:
+          type: string
+          format: password
+          example: "Suleyman123!"
+
+    ProfileUpdateInput:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        firstName:
+          type: string
+          description: Güncellenecek ad bilgisi.
+          example: "Betül"
+        lastName:
+          type: string
+          description: Güncellenecek soyad bilgisi.
+          example: "Erkoç"
+        communicationPreferences:
+          type: object
+          description: Kullanıcının bildirim ve iletişim tercihleri.
+          properties:
+            newsletter:
+              type: boolean
+              example: true
+            smsNotifications:
+              type: boolean
+              example: false
 
-    ProductList:
+    PasswordUpdateInput:
+      type: object
+      required:
+        - oldPassword
+        - newPassword
+      properties:
+        oldPassword:
+          type: string
+          format: password
+          description: Mevcut şifre doğrulaması.
+        newPassword:
+          type: string
+          format: password
+          description: Belirlenecek yeni güçlü şifre.
+          example: "YeniGucluSifre2026!"
+
+    User:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-
-    OrderList:
+        _id:
+          type: string
+          example: "user_65432"
+          description: Kullanıcının benzersiz sistem kimliği.
+        email:
+          type: string
+          format: email
+          example: "betul.erkoc@example.com"
+        firstName:
+          type: string
+          example: "Betül"
+        lastName:
+          type: string
+          example: "Erkoç"
+        isEmailVerified:
+          type: boolean
+          example: true
+        createdOn:
+          type: string
+          format: date-time
+          description: Hesabın oluşturulma zamanı.
+    Alert:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        _id:
+          type: string
+          description: Alarmın benzersiz ID'si
+          example: "alrt_64a7f9"
+        productId:
+          type: string
+          description: Takip edilen ürünün ID'si
+          example: "prod_9872"
+        targetPrice:
+          type: number
+          format: float
+          description: Beklenen düşüş fiyatı
+          example: 1250.50
+        currentPriceAtCreation:
+          type: number
+          format: float
+          description: Alarm kurulduğu andaki mevcut fiyat
+          example: 1500.00
+        isActive:
+          type: boolean
+          description: Alarm şu an devrede mi?
+          example: true
+        createdOn:
+          type: string
+          format: date-time
+          description: Alarmın kurulma zamanı
+          example: "2026-03-08T15:00:00Z"
 
-    Pagination:
+   
+    AlertInput:
       type: object
+      required:
+        - productId
+        - targetPrice
       properties:
-        page:
-          type: integer
-          description: Mevcut sayfa
-          example: 1
-        limit:
-          type: integer
-          description: Sayfa başına kayıt
-          example: 20
-        totalPages:
-          type: integer
-          description: Toplam sayfa sayısı
-          example: 5
-        totalItems:
-          type: integer
-          description: Toplam kayıt sayısı
-          example: 95
+        productId:
+          type: string
+          description: Hangi ürün takip edilecek?
+          example: "prod_9872"
+        targetPrice:
+          type: number
+          format: float
+          description: Fiyat kaça düşerse haber verelim?
+          example: 1250.50
 
     Error:
       type: object
-      required:
-        - code
-        - message
       properties:
-        code:
-          type: string
-          description: Hata kodu
-          example: "VALIDATION_ERROR"
         message:
           type: string
-          description: Hata mesajı
-          example: "Geçersiz email adresi"
-        details:
-          type: array
-          description: Detaylı hata bilgileri
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                example: "email"
-              message:
-                type: string
-                example: "Email formatı geçersiz"
+          example: "Yetkisiz erişim veya geçersiz veri girişi."
+        code:
+          type: integer
+          example: 401
 
   responses:
+
+    Unauthorized:
+
+      description: Yetkisiz erişim. Geçerli bir Bearer Token gerekli.
+   
+
     BadRequest:
       description: Geçersiz istek
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: "BAD_REQUEST"
-            message: "İstek parametreleri geçersiz"
-    
-    Unauthorized:
-      description: Yetkisiz erişim
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: "UNAUTHORIZED"
-            message: "Kimlik doğrulama başarısız"
-    
+            $ref: "#/components/schemas/Error"
+
     NotFound:
       description: Kaynak bulunamadı
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: "NOT_FOUND"
-            message: "İstenen kaynak bulunamadı"
-    
-    Forbidden:
-      description: Erişim reddedildi
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: "FORBIDDEN"
-            message: "Bu işlem için yetkiniz bulunmamaktadır"
-``
+            $ref: "#/components/schemas/Error"

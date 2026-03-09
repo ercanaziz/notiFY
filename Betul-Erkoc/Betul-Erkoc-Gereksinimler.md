@@ -19,7 +19,7 @@
 **Açıklama:** Mevcut kullanıcının güvenliği için şifresini yenilemesini sağlar.
 
 ## 5. Hesap Silme 
-**API Metodu:** `DELETE /user/account`  
+**API Metodu:** `DELETE /user/profile`  
 
 **Açıklama:** Kullanıcının tüm hesap verilerini ve tercihlerini sistemden kalıcı olarak kaldırır.
 

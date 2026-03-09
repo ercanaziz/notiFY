@@ -24,7 +24,7 @@
 
 5. **Kategori Listeleme**
 
-    **API Metodu**: `GET /categories`
+    **API Metodu**: `GET /products/category`
 
     **Açıklama**: Ürünlerin gruplandığı (Teknoloji, Kitap vb.) kategorileri görüntüler.
 

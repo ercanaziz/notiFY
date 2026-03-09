@@ -6,25 +6,25 @@
 
 2. **Ürün Çeşidine (Kategori) Göre Listeleme**
 
-    **API Metodu**: `GET /products/category`
+    **API Metodu**: `GET /products/categories`
 
     **Açıklama**: Ürünleri belirli bir kategoriye göre filtrelemek için kullanılır.
 
 3. **Markaya Göre Listeleme**
 
-    **API Metodu**: `GET /products/brand`
+    **API Metodu**: `GET /products`
 
     **Açıklama**: Belirli bir markanın ürünlerini getirmek için kullanılır.
 
 4. **Fiyata Göre Sıralama**
 
-    **API Metodu**:`GET /products/price_sort/order={asc/desc}`
+    **API Metodu**:`GET /products`
 
     **Açıklama**: Ürünleri fiyata göre artan veya azalan şekilde sıralamak için kullanılır.
 
 5. **Tarihe Göre Sıralama**
 
-    **API Metodu**: `GET /products/date_sort/order={asc/desc}`
+    **API Metodu**: `GET /products`
 
     **Açıklama**: Ürünlerin eklenme tarihine göre eskiden yeniye veya yeniden eskiye sıralanmasıdır.
 

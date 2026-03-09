@@ -12,13 +12,13 @@
 
 3. **Alarm Durumu Güncelleme**
 
-    **API Metodu**: `PATCH /alerts/{id}`
+    **API Metodu**: `PATCH /alerts/{alertId}`
 
     **Açıklama**: Kurulu olan alarmın hedef fiyatını veya bildirim tipini değiştirir.
 
 4. **Alarm Silme**
 
-    **API Metodu**:`DELETE /alerts/{id}`
+    **API Metodu**:`DELETE /alerts/{alertId}`
 
     **Açıklama**: İptal edilmek istenen fiyat alarmını sistemden kaldırır.
 
