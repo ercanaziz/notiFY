@@ -26,7 +26,7 @@ type WatchlistItem struct {
 var collection *mongo.Collection
 
 func init() {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://nisa:stcnokta@test.ek07wik.mongodb.net/?appName=test")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -36,6 +36,7 @@ func init() {
 	}
 	fmt.Println("✅ MongoDB Bağlantısı Başarılı!")
 	collection = client.Database("notiFY_DB").Collection("watchlist")
+
 }
 
 func main() {
