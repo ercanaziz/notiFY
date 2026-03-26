@@ -3,66 +3,173 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>notiFY - Takip Listem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notiFY | Fiyat Takip Dashboard</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --text-white: #f1f5f9;
+            --danger: #ef4444;
+        }
+
         body {
-            font-family: sans-serif;
-            padding: 20px;
-            background: #f4f4f4;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
         }
 
-        .card {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--card-bg);
+            padding-bottom: 20px;
+        }
+
+        .logo-area {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent-blue);
+            letter-spacing: -1px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .product-price {
+            font-size: 24px;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 8px 16px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        button {
-            cursor: pointer;
-            background: #ff4444;
+        .btn-delete:hover {
+            background: var(--danger);
             color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
+        }
+
+        #loading-text {
+            text-align: center;
+            font-size: 18px;
+            color: #94a3b8;
+            grid-column: 1 / -1;
         }
     </style>
 </head>
 
 <body>
-    <h1>🛒 notiFY Takip Listesi</h1>
-    <div id="watchlist">Yükleniyor...</div>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">🔔 notiFY</div>
+            <p>Gerçek Zamanlı Fiyat Takip ve Akıllı Alarm Platformu</p>
+        </header>
+
+        <div id="product-list" class="dashboard-grid">
+            <p id="loading-text">Veritabanına bağlanılıyor, lütfen bekleyin...</p>
+        </div>
+    </div>
 
     <script>
+
         const API_URL = "https://notify-nisanur-api.onrender.com";
 
-        // 1. Verileri Çek ve Listele
-        async function fetchWatchlist() {
-            const res = await fetch(`${API_URL}/watchlist`);
-            const data = await res.json();
-            const container = document.getElementById('watchlist');
-            container.innerHTML = "";
+        async function loadData() {
+            try {
+                const response = await fetch(`${API_URL}/watchlist`);
+                const items = await response.json();
 
-            data.forEach(item => {
-                container.innerHTML += `
-                    <div class="card">
-                        <h3>${item.name}</h3>
-                        <p>Fiyat: ${item.price} TL</p>
-                        <button onclick="deleteItem('${item.id}')">Sil</button>
+                const listDiv = document.getElementById('product-list');
+                listDiv.innerHTML = "";
+
+                if (items.length === 0) {
+                    listDiv.innerHTML = "<p id='loading-text'>Henüz takip edilen ürün yok.</p>";
+                    return;
+                }
+
+                items.forEach(item => {
+                    const card = `
+                    <div class="product-card">
+                        <span class="badge">Aktif Takip</span>
+                        <h3 class="product-name">${item.name}</h3>
+                        <div class="product-price">${item.price} TL</div>
+                        <button class="btn-delete" onclick="removeItem('${item.id}')">Takibi Durdur</button>
                     </div>
                 `;
-            });
+                    listDiv.innerHTML += card;
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading-text').innerText = "Hata: Sunucuya ulaşılamadı. (CORS veya Uyku Modu)";
+            }
         }
 
-        // 2. Silme İşlemi
-        async function deleteItem(id) {
-            await fetch(`${API_URL}/watchlist/${id}`, { method: 'DELETE' });
-            fetchWatchlist(); // Listeyi güncelle
+        async function removeItem(id) {
+            if (confirm("Bu ürünü silmek istediğine emin misin?")) {
+                await fetch(`${API_URL}/watchlist/${id}`, { method: 'DELETE' });
+                loadData();
+            }
         }
 
-        fetchWatchlist();
+
+        loadData();
     </script>
+
 </body>
 
 </html>
