@@ -1,15 +1,12 @@
-
-//siteden veri cekme denemesi
-
+//siteden veri cekme DENEME AMACLI
 
 package main
 
 import (
-	"fmt" //Ekrana yazı yazdırmak (çıktı vermek) için kullanılır.
+	"fmt"     //Ekrana yazı yazdırmak (çıktı vermek) için kullanılır.
 	"strings" //Yazıları kesmek, birleştirmek, büyütmek/küçültmek veya boşlukları silmek için kullanılır
-	"github.com/gocolly/colly/v2" //Senin adına bir web sitesine gider, HTML kodlarını indirir ve istediğin parçaları (fiyat, başlık vb.) bulup sana getirir.
 
-	
+	"github.com/gocolly/colly/v2" //Senin adına bir web sitesine gider, HTML kodlarını indirir ve istediğin parçaları (fiyat, başlık vb.) bulup sana getirir.
 	//Colly: Siteye bağlanır ve HTML sayfasını bir paket gibi alır.
 	//Strings: O paketin içindeki düzensiz metinleri (fiyatlardaki boşluklar gibi) ayıklar ve temizler.
 	//Fmt: Sonuçları terminal ekranına düzenli bir şekilde basar.
@@ -47,7 +44,6 @@ func main() {
 		fmt.Println("Eyyo taranıyor:", r.URL)
 	})
 
-	// Elbiseler kategorisinden başlayalım
 	err := c.Visit("https://www.eyyo.com.tr/siyah-fermuarli-esofman-takim-ate-4643")
 	if err != nil {
 		fmt.Println("Hata:", err)
