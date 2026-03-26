@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -42,7 +43,7 @@ func init() {
 
 func main() {
 	r := gin.Default()
-
+	r.Use(cors.Default())
 	// 1. ÜRÜN ARAMA
 	r.GET("/products/search", func(c *gin.Context) {
 		query := c.Query("q")
@@ -146,7 +147,7 @@ func main() {
 		}
 		c.JSON(200, gin.H{"categories": categories})
 	})
-	
+
 	r.GET("/products/detail/:id", func(c *gin.Context) {
 		idParam := c.Param("id")
 		objectID, err := primitive.ObjectIDFromHex(idParam)
@@ -197,6 +198,7 @@ func main() {
 		c.JSON(200, results)
 	})
 
+	r.Use(cors.Default())
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // Lokalinde yine 8080 çalışır

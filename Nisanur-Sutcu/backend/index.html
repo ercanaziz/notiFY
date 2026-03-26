@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>notiFY - Takip Listem</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            cursor: pointer;
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🛒 notiFY Takip Listesi</h1>
+    <div id="watchlist">Yükleniyor...</div>
+
+    <script>
+        const API_URL = "https://notify-nisanur-api.onrender.com";
+
+        // 1. Verileri Çek ve Listele
+        async function fetchWatchlist() {
+            const res = await fetch(`${API_URL}/watchlist`);
+            const data = await res.json();
+            const container = document.getElementById('watchlist');
+            container.innerHTML = "";
+
+            data.forEach(item => {
+                container.innerHTML += `
+                    <div class="card">
+                        <h3>${item.name}</h3>
+                        <p>Fiyat: ${item.price} TL</p>
+                        <button onclick="deleteItem('${item.id}')">Sil</button>
+                    </div>
+                `;
+            });
+        }
+
+        // 2. Silme İşlemi
+        async function deleteItem(id) {
+            await fetch(`${API_URL}/watchlist/${id}`, { method: 'DELETE' });
+            fetchWatchlist(); // Listeyi güncelle
+        }
+
+        fetchWatchlist();
+    </script>
+</body>
+
+</html>
