@@ -1,0 +1,209 @@
+{
+  "info": {
+    "_postman_id": "5cfef780-cd09-4e1e-8fec-2c9d6b08c77e",
+    "name": "notiFY-nisa",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50537295",
+    "_collection_link": "https://go.postman.co/collection/50537295-5cfef780-cd09-4e1e-8fec-2c9d6b08c77e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Ürün Arama",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/products/search?q=*****KEYWORD****",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "*****KEYWORD****"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Takip Listesine Ekleme",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": \"nisa_test\",\n    \"product_name\": \"Kablosuz Kulaklık\",\n    \"product_url\": \"https://example.com/koltuk takımı\",\n    \"current_price\": \"55550 TL\",\n    \"category\": \"Mobilya\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/watchlist/add",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist",
+            "add"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    },
+    {
+      "name": "Takip Listesini Listeleme",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/watchlist",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "Takip Listesinden Çıkarma",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/watchlist/******ID******",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist",
+            "******ID******"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Kategori Listeleme",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\": \"nisa_1\",\r\n    \"product_name\": \"Siyah Elbise\",\r\n    \"product_url\": \"www.eyyo.com.tr/elbise\",\r\n    \"current_price\": \"500 TL\",\r\n    \"category\": \"Elbise\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/products/category",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "category"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Popüler Ürünleri Görüntüleme",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://notify-nisanur-api.onrender.com/products/trending",
+          "protocol": "https",
+          "host": [
+            "notify-nisanur-api",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "trending"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

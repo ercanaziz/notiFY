@@ -146,8 +146,7 @@ func main() {
 		}
 		c.JSON(200, gin.H{"categories": categories})
 	})
-
-	// 7. TEK ÜRÜN DETAYI (ID ile getir ve izlenmeyi +1 artır)
+	
 	r.GET("/products/detail/:id", func(c *gin.Context) {
 		idParam := c.Param("id")
 		objectID, err := primitive.ObjectIDFromHex(idParam)
@@ -174,6 +173,7 @@ func main() {
 
 		c.JSON(200, updatedItem)
 	})
+
 	// 6. POPÜLER ÜRÜNLER (TRENDING)
 	r.GET("/products/trending", func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
