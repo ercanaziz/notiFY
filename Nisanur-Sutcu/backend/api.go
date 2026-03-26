@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -169,5 +170,9 @@ func main() {
 		c.JSON(200, results)
 	})
 
-	r.Run(":8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Lokalinde yine 8080 çalışır
+	}
+	r.Run(":" + port)
 }
