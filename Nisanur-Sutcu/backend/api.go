@@ -147,6 +147,33 @@ func main() {
 		c.JSON(200, gin.H{"categories": categories})
 	})
 
+	// 7. TEK ÜRÜN DETAYI (ID ile getir ve izlenmeyi +1 artır)
+	r.GET("/products/detail/:id", func(c *gin.Context) {
+		idParam := c.Param("id")
+		objectID, err := primitive.ObjectIDFromHex(idParam)
+		if err != nil {
+			c.JSON(400, gin.H{"error": "Geçersiz ID formatı!"})
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		filter := bson.M{"_id": objectID}
+		update := bson.M{"$inc": bson.M{"watch_count": 1}}
+
+		opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+
+		var updatedItem WatchlistItem
+		err = collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&updatedItem)
+
+		if err != nil {
+			c.JSON(404, gin.H{"error": "Ürün bulunamadı!"})
+			return
+		}
+
+		c.JSON(200, updatedItem)
+	})
 	// 6. POPÜLER ÜRÜNLER (TRENDING)
 	r.GET("/products/trending", func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
