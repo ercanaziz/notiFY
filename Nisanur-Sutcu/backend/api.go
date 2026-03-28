@@ -206,6 +206,27 @@ func main() {
 			}
 			c.JSON(200, gin.H{"message": "Silindi"})
 		})
+
+		// KATEGORİ LİSTELEME
+
+		authorized.GET("/products/category", func(c *gin.Context) {
+			userID := c.MustGet("user_id").(string)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			filter := bson.M{"user_id": userID}
+			categories, err := collection.Distinct(ctx, "category", filter)
+
+			if err != nil {
+				c.JSON(500, gin.H{"error": "Kategoriler getirilemedi!"})
+				return
+			}
+
+			if categories == nil {
+				categories = []interface{}{}
+			}
+			c.JSON(200, gin.H{"categories": categories})
+		})
 	}
 
 	port := os.Getenv("PORT")
