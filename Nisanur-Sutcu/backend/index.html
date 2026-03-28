@@ -4,110 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>notiFY | Fiyat Takip Dashboard</title>
+    <title>notiFY | Premium Dashboard</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-blue: #38bdf8;
-            --text-white: #f1f5f9;
-            --danger: #ef4444;
+            --bg: #0b0e14;
+            --panel: rgba(30, 41, 59, 0.7);
+            --cyan: #22d3ee;
+            --purple: #818cf8;
+            --text: #f1f5f9;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-white);
+            background: radial-gradient(circle at top right, #1e1b4b, #0b0e14);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 40px;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 50px;
-            border-bottom: 2px solid var(--card-bg);
-            padding-bottom: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
         }
 
-        .logo-area {
-            font-size: 32px;
+        .logo {
+            font-size: 2.5rem;
             font-weight: 800;
-            color: var(--accent-blue);
-            letter-spacing: -1px;
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-panel {
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            flex: 1;
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            color: #0b0e14;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 25px;
+        }
+
+        .sidebar {
+            background: var(--panel);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .nav-item {
+            padding: 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--cyan);
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
 
-        .product-card {
-            background: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
+        .card {
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
             position: relative;
         }
 
-        .product-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+        .card h3 {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            color: var(--purple);
         }
 
-        .product-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: block;
+        .card .price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 10px 0;
+            color: var(--cyan);
         }
 
-        .product-price {
-            font-size: 24px;
-            color: var(--accent-blue);
-            font-weight: 700;
-            margin: 15px 0;
+        .watch-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 10px;
+            background: rgba(129, 140, 248, 0.2);
+            color: var(--purple);
+            padding: 4px 8px;
+            border-radius: 10px;
         }
 
-        .badge {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-blue);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-delete {
+        .btn-del {
             background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 8px 16px;
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            width: 100%;
+            padding: 8px;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
             font-weight: 600;
-            transition: 0.2s;
+            margin-top: 15px;
+            transition: 0.3s;
         }
 
-        .btn-delete:hover {
-            background: var(--danger);
+        .btn-del:hover {
+            background: #ef4444;
             color: white;
-        }
-
-        #loading-text {
-            text-align: center;
-            font-size: 18px;
-            color: #94a3b8;
-            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -116,60 +170,129 @@
 
     <div class="container">
         <header>
-            <div class="logo-area">🔔 notiFY</div>
-            <p>Gerçek Zamanlı Fiyat Takip ve Akıllı Alarm Platformu</p>
+            <div class="logo">notiFY</div>
+            <p>Gerçek Zamanlı Fiyat Takip Platformu</p>
         </header>
 
-        <div id="product-list" class="dashboard-grid">
-            <p id="loading-text">Veritabanına bağlanılıyor, lütfen bekleyin...</p>
+        <div class="glass-panel">
+            <div class="input-row">
+                <input type="text" id="searchBox" placeholder="Ürün adına göre ara...">
+                <button onclick="searchProducts()">🔍 Ara</button>
+            </div>
+            <div class="input-row">
+                <input type="text" id="addName" placeholder="Ürün Adı">
+                <input type="text" id="addPrice" placeholder="Fiyat">
+                <input type="text" id="addCategory" placeholder="Kategori">
+                <button onclick="addProduct()">+ Takibe Ekle</button>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="nav-item" onclick="loadAll()">🏠 Tüm Ürünler</div>
+                <div class="nav-item" onclick="loadTrending()">🔥 En Çok İzlenenler</div>
+                <div style="margin: 20px 0 10px 10px; color: var(--purple); font-size: 11px; font-weight: bold;">DİNAMİK
+                    KATEGORİLER</div>
+                <div id="category-menu"></div>
+            </aside>
+
+            <main id="list" class="dashboard-grid">
+                <p style="text-align:center; grid-column: 1/-1;">Yükleniyor...</p>
+            </main>
         </div>
     </div>
 
     <script>
-
         const API_URL = "https://notify-nisanur-api.onrender.com";
 
-        async function loadData() {
-            try {
-                const response = await fetch(`${API_URL}/watchlist`);
-                const items = await response.json();
-
-                const listDiv = document.getElementById('product-list');
-                listDiv.innerHTML = "";
-
-                if (items.length === 0) {
-                    listDiv.innerHTML = "<p id='loading-text'>Henüz takip edilen ürün yok.</p>";
-                    return;
-                }
-
-                items.forEach(item => {
-                    const card = `
-                    <div class="product-card">
-                        <span class="badge">Aktif Takip</span>
-                        <h3 class="product-name">${item.name}</h3>
-                        <div class="product-price">${item.price} TL</div>
-                        <button class="btn-delete" onclick="removeItem('${item.id}')">Takibi Durdur</button>
-                    </div>
-                `;
-                    listDiv.innerHTML += card;
-                });
-            } catch (err) {
-                console.error(err);
-                document.getElementById('loading-text').innerText = "Hata: Sunucuya ulaşılamadı. (CORS veya Uyku Modu)";
-            }
+        async function loadAll() {
+            const res = await fetch(`${API_URL}/watchlist`);
+            const data = await res.json();
+            updateCategoryMenu(data);
+            render(data);
         }
 
-        async function removeItem(id) {
-            if (confirm("Bu ürünü silmek istediğine emin misin?")) {
+        // 1. DİNAMİK KATEGORİ MENÜSÜ
+        function updateCategoryMenu(data) {
+            const menu = document.getElementById('category-menu');
+            menu.innerHTML = "";
+            const categories = [...new Set(data.map(item => item.category))].filter(Boolean);
+            categories.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'nav-item';
+                div.innerText = `📁 ${cat}`;
+                div.onclick = () => loadCategory(cat);
+                menu.appendChild(div);
+            });
+        }
+
+        // 2. KATEGORİ FİLTRELEME
+        async function loadCategory(catName) {
+            const res = await fetch(`${API_URL}/products/category?name=${catName}`);
+            const data = await res.json();
+            render(data); // Sadece o kategoridekileri basar
+        }
+
+        // 3. TRENDLER (WatchCount'a göre sıralama frontend'de veya backend'de yapılır)
+        async function loadTrending() {
+            const res = await fetch(`${API_URL}/watchlist`); // Tüm veriyi çek
+            let data = await res.json();
+            // Frontend tarafında WatchCount'a göre büyükten küçüğe sıralıyoruz
+            data.sort((a, b) => (b.watch_count || 0) - (a.watch_count || 0));
+            render(data);
+        }
+
+        // 4. ÜRÜN SİLME (Geri geldi!)
+        async function deleteItem(id) {
+            if (confirm("Bu ürünü takipten çıkarmak istediğine emin misin?")) {
                 await fetch(`${API_URL}/watchlist/${id}`, { method: 'DELETE' });
-                loadData();
+                loadAll();
             }
         }
 
+        async function addProduct() {
+            const n = document.getElementById('addName').value;
+            const p = document.getElementById('addPrice').value;
+            const c = document.getElementById('addCategory').value;
+            await fetch(`${API_URL}/watchlist/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product_name: n, current_price: String(p),
+                    category: c || "Genel", user_id: "nisa_user", watch_count: 1
+                })
+            });
+            loadAll();
+        }
 
-        loadData();
+        async function searchProducts() {
+            const q = document.getElementById('searchBox').value;
+            const res = await fetch(`${API_URL}/products/search?q=${q}`);
+            render(await res.json());
+        }
+
+        function render(data) {
+            const container = document.getElementById('list');
+            container.innerHTML = "";
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Ürün bulunamadı.</p>";
+                return;
+            }
+            data.forEach(item => {
+                const id = item.id || item._id; // Silme işlemi için ID şart
+                container.innerHTML += `
+                <div class="card">
+                    <span class="watch-badge">👁️ ${item.watch_count || 0}</span>
+                    <div style="font-size:10px; color:var(--cyan);">${item.category || 'Genel'}</div>
+                    <h3>${item.product_name}</h3>
+                    <div class="price">${item.current_price} TL</div>
+                    <button class="btn-del" onclick="deleteItem('${id}')">Takipten Çıkar</button>
+                </div>`;
+            });
+        }
+
+        loadAll();
     </script>
-
 </body>
 
 </html>
