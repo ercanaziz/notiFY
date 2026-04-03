@@ -17,7 +17,7 @@
     "current_price": 75000.0,
     "category": "Elektronik",
     "product_url": "[https://example.com/urun](https://example.com/urun)"
-  }
+  } ```
 - **Authentication:** Bearer Token gerekli
 - **Açıklama:** Yeni bir ürünü, isteği atan kullanıcının user_id bilgisiyle MongoDB'ye kaydeder.
 - **Response:** 201 Created - Ürün başarıyla takip listesine eklendi
