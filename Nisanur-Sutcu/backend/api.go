@@ -113,18 +113,29 @@ func main() {
 	})
 
 	// Popüler Ürünler
+	// Popüler Ürünler (Garantili Sıralama)
 	r.GET("/products/trending", func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		opts := options.Find().SetSort(bson.D{{Key: "watch_count", Value: -1}}).SetLimit(10)
-		cursor, err := collection.Find(ctx, bson.M{}, opts)
+		// Sıralama ve Limiti burada açıkça tanımlıyoruz
+		findOptions := options.Find()
+		findOptions.SetSort(bson.D{{Key: "watch_count", Value: -1}}) // -1: Büyükten küçüğe
+		findOptions.SetLimit(10)
+
+		// Filtre boş (herkesin ürünleri), ama sıralama watch_count'a göre
+		cursor, err := collection.Find(ctx, bson.M{}, findOptions)
 		if err != nil {
 			c.JSON(500, gin.H{"error": "Veriler getirilemedi"})
 			return
 		}
-		var results []WatchlistItem
-		cursor.All(ctx, &results)
+
+		var results []WatchlistItem = []WatchlistItem{}
+		if err := cursor.All(ctx, &results); err != nil {
+			c.JSON(500, gin.H{"error": "Veri okuma hatası"})
+			return
+		}
+
 		c.JSON(200, results)
 	})
 
