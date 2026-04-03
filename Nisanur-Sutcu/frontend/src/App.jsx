@@ -1,120 +1,98 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { productService } from './productService'
+import './index.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [trending, setTrending] = useState([])
+  const [watchlist, setWatchlist] = useState([])
+  const [categories, setCategories] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+
+  // LİSTEYİ GÖSTERİP GİZLEMEK İÇİN YENİ DURUM
+  const [isListOpen, setIsListOpen] = useState(false)
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    try {
+      const t = await productService.getTrending(); setTrending(t.data || [])
+      const w = await productService.getWatchlist(); setWatchlist(w.data || [])
+      const c = await productService.getCategories(); setCategories(c.data.categories || [])
+    } catch (err) { console.log("Veri çekilemedi, token bekliyoruz...") }
+  }
+
+  const handleSearch = async () => {
+    if (!searchTerm) { setSearchResults([]); return; }
+    const res = await productService.searchProducts(searchTerm)
+    setSearchResults(res.data || [])
+  }
+
+  const removeFromWatchlist = async (id) => {
+    await productService.removeFromWatchlist(id)
+    setWatchlist(watchlist.filter(item => item.id !== id))
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      <header className="header">
+        <h1 className="logo">notiFY<span>.</span></h1>
+        <div className="search-box">
+          <input
+            placeholder="iPhone, Kitap, Ayakkabı..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <button onClick={handleSearch}>Ara</button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      <div className="main-grid">
+        <aside className="sidebar">
+          <h3>📂 Kategoriler</h3>
+          {categories.map((cat, i) => <div key={i} className="category-item">{cat}</div>)}
+        </aside>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <section className="content">
+          <h3>{searchResults.length > 0 ? "🔎 Sonuçlar" : "🔥 Trendler"}</h3>
+          <div className="product-grid">
+            {(searchResults.length > 0 ? searchResults : trending).map(item => (
+              <div key={item.id} className="product-card">
+                <strong>{item.product_name}</strong>
+                <p>{item.current_price} TL</p>
+                <button className="add-btn" onClick={() => alert("Eklendi!")}>Takip Et</button>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {/* --- TIKLANABİLİR TAKİP LİSTESİ --- */}
+        <aside className="watchlist-panel">
+          <h3
+            onClick={() => setIsListOpen(!isListOpen)}
+            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            📋 Takip Listem {isListOpen ? '▼' : '▶'}
+          </h3>
+
+          {isListOpen && (
+            <div className="watchlist-content">
+              {watchlist.length === 0 ? <p style={{ fontSize: '12px', color: '#888' }}>Listeniz henüz boş.</p> :
+                watchlist.map(item => (
+                  <div key={item.id} className="watchlist-item">
+                    <span>{item.product_name}</span>
+                    <button className="del-btn" onClick={() => removeFromWatchlist(item.id)}>✕</button>
+                  </div>
+                ))
+              }
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
   )
 }
 
