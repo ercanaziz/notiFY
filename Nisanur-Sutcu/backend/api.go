@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5" // Yeni eklenen kütüphane
 	"github.com/joho/godotenv"
@@ -99,9 +98,19 @@ func AuthMiddleware() gin.HandlerFunc {
 
 func main() {
 	r := gin.Default()
-	r.Use(cors.Default())
+	r.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") // Veya "http://localhost:5173"
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 
-	// --- PUBLIC (HERKESE AÇIK) ROTALAR ---
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
 
 	// Popüler Ürünler
 	r.GET("/products/trending", func(c *gin.Context) {
