@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5" // Yeni eklenen kütüphane
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -32,7 +32,7 @@ type WatchlistItem struct {
 }
 
 var collection *mongo.Collection
-var mySigningKey = []byte("notify_token") // Betül'ün gönderdiği anahtar
+var mySigningKey = []byte("notify_token")
 
 func init() {
 	_ = godotenv.Load()
