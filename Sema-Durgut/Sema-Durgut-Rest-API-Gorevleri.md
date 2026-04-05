@@ -1,5 +1,5 @@
 # Sema Durgut - Rest Api Metotları
-**API Test Videosu:** Link buraya eklenecek
+**API Test Videosu:** (https://youtu.be/3UCM4_Z8tsE)
 
 ## 1. Fiyat Geçmişini Getirme
 - **Endpoint:** `GET /analysis/history/{id}`
