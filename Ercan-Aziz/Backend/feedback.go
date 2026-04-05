@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"notify-api/db"
-	"notify-api/router"
+	"Ercan-Aziz/Backend/db"
+	"Ercan-Aziz/Backend/router"
 )
 
 func Start() {
