@@ -1,6 +1,23 @@
-# REST API Görev Dağılımı
-
 **REST API Adresi:** https://notify-2hde.onrender.com
+
+# REST API Görev Dağılımı
+Nisanur Sütcü
+- **Backend Mimari Tasarımı:** Monolitik (tek dosya) yapıdaki Go kodunu; handlers, models ve db katmanlarına ayırarak Modüler Mimari (MVC yapısına uygun) geçişini sağladım.
+
+- **Veritabanı Entegrasyonu:** MongoDB sürücüsü kullanılarak veritabanı bağlantı katmanının oluşturulması ve koleksiyon yönetimini gerçekleştirdim.
+
+- **CRUD Operasyonları:** Kullanıcıya özel takip listesi yönetimi için "Ekleme, Listeleme, Silme ve Arama" fonksiyonlarını geliştirdim.
+
+- **Gelişmiş Sorgulama Logic'leri:** * Regex Search: Ürün isimleri üzerinden büyük/küçük harf duyarsız, esnek arama algoritmasını kurguladım.
+
+- **Aggregation & Sorting:** Popüler ürünlerin tespiti için watch_count değerine göre büyükten küçüğe sıralama (Sort) ve Limit operasyonlarını yönettim.
+
+- **Distinct Query:** Takip listesindeki verilerden benzersiz kategori isimlerini çeken Distinct sorgusunu yazdım.
+
+- **Güvenlik ve Yetkilendirme:** API rotalarını korumak için JWT (JSON Web Token) tabanlı AuthMiddleware entegrasyonunu yaptım ve tüm isteklere user_id bazlı filtreleme ekledim.
+
+- **Hata Yönetimi (Error Handling):** Geçersiz ID formatları, bulunamayan kayıtlar (404) ve veritabanı hataları için özelleştirilmiş JSON hata mesajları ve HTTP statü kodlarını yapılandırdım.
+
 
 Nisanur Sütcü - REST API Metotları
 **API Test Videosu:** https://youtu.be/HEHiOFrZV0k
