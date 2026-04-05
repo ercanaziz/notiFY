@@ -1,6 +1,6 @@
-module notify-api
+module github.com/ercanaziz/notiFY
 
-go 1.21
+go 1.26.1
 
 require (
 	github.com/gin-contrib/cors v1.5.0

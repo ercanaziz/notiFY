@@ -1,4 +1,4 @@
-package main
+package feedback
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"notify-api/router"
 )
 
-func main() {
+func Start() {
 	db.Connect()
 
 	r := router.Setup()
