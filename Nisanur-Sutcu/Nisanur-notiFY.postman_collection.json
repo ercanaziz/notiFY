@@ -1,0 +1,227 @@
+{
+  "info": {
+    "_postman_id": "ff8f1cec-c6fb-495a-a438-59cca235acf4",
+    "name": "Nisanur-notiFY",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50537295",
+    "_collection_link": "https://go.postman.co/collection/50537295-ff8f1cec-c6fb-495a-a438-59cca235acf4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Takip Listesini Listeleme",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/watchlist",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Takip Listesine Ekleme",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "    {\r\n        \"id\": \"69c7affe50abd08aa5fe6a64\",\r\n        \"user_id\": \"69d021bd5a766305489f7061\",\r\n        \"product_name\": \"deneme\",\r\n        \"brand\": \"Apple\",\r\n        \"color\": \"Titanium Blue\",\r\n        \"product_url\": \"https://example.com/iphone15\",\r\n        \"current_price\": 75000.5,\r\n        \"category\": \"edebiyat\",\r\n        \"watch_count\": 15,\r\n        \"created_at\": \"2026-03-28T10:39:58.3Z\"\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://notify-n.onrender.com/watchlist/add",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Takip Listesinden Çıkarma",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/watchlist/69c8472ca66108ab1f527c44",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "watchlist",
+            "69c8472ca66108ab1f527c44"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ürün Arama",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/products/search?q=deneme",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "deneme"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Kategori Listeleme",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/products/category",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "category"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "(+) ÜRÜN İNCELEME",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/products/detail/69d0250199b4eb9ed90a3c86",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "detail",
+            "69d0250199b4eb9ed90a3c86"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Popüler Ürünleri Görüntüleme",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzUzMzQyNzUsImlkIjoiNjlkMDIxYmQ1YTc2NjMwNTQ4OWY3MDYxIn0.HmwjayETu9vSJOThebXR0i-e7mtaGGsOI6Q4QhFLgxA",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://notify-n.onrender.com/products/trending",
+          "protocol": "https",
+          "host": [
+            "notify-n",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "products",
+            "trending"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
