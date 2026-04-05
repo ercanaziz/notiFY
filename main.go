@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	backendDB "github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/db"
 	backendRouter "github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/router"
-	historyDB "github.com/ercanaziz/notiFY/Sema-Durgut/db"
 	history "github.com/ercanaziz/notiFY/Sema-Durgut"
+	historyDB "github.com/ercanaziz/notiFY/Sema-Durgut/db"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {

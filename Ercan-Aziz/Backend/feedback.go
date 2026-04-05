@@ -3,7 +3,8 @@ package feedback
 import (
 	"fmt"
 	"os"
-	"github.com/gin-gonic/gin" 
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/db"
 	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/router"
@@ -22,5 +23,5 @@ func Start() {
 	r.Run(":" + port)
 }
 func RegisterRoutes(r *gin.Engine) {
-    // mevcut Setup() içindeki route'lar
+	// mevcut Setup() içindeki route'lar
 }

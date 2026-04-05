@@ -30,3 +30,10 @@ func Setup() *gin.Engine {
 
 	return r
 }
+func RegisterRoutes(r *gin.Engine) {
+    r.GET("/products", handlers.GetProducts)
+    r.GET("/products/categories", handlers.GetCategories)
+    r.POST("/support/feedback", middleware.MockAuthMiddleware(), handlers.PostFeedback)
+    r.GET("/admin/subscription-plans", middleware.AdminAuthMiddleware(), handlers.GetPlans)
+    r.PUT("/admin/subscription-plans", middleware.AdminAuthMiddleware(), handlers.UpdatePlan)
+}
