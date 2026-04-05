@@ -7,7 +7,6 @@ import (
 
 func main() {
 
-	go feedback.Start()
-	history.Start()
-	select {}
+	go history.Start()
+	feedback.Start()
 }

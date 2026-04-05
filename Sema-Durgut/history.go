@@ -1,6 +1,8 @@
 package history
 
 import (
+	"os"
+
 	"github.com/ercanaziz/notiFY/Sema-Durgut/analysis"
 	"github.com/ercanaziz/notiFY/Sema-Durgut/db"
 	"github.com/gin-gonic/gin"
@@ -28,8 +30,11 @@ func Start() {
 		products.GET("/filter", analysis.FilterByColor)
 	}
 
-	// 4. Sunucuyu Başlat
-	r.Run(":8080") // localhost:8080'de dinliyor
+	port := os.Getenv("HISTORY_PORT")
+	if port == "" {
+		port = "8081"
+	}
+	r.Run(":" + port)
 }
 
 /* Küçük ama hayati bir ipucu: Ana projeye kodları geçirirken, kendi test
