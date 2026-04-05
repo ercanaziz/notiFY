@@ -1,8 +1,6 @@
-package main
+package product
 
 import (
-	"fmt"
-	"os"
 	"strings"
 
 
@@ -10,8 +8,8 @@ import (
 	//"nisanur-sutcu/db"
 	//"nisanur-sutcu/models" 
 	
-	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/db"  
-	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/"
+	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"  
+	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/handlers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -48,43 +46,22 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 	}
 }
+func Start() {
+    _ = godotenv.Load()
+    db.Connect()
+}
 
-func main() {
-	_ = godotenv.Load()
-	db.Connect()
+func RegisterRoutes(r *gin.Engine) {
+    r.GET("/products/trending", handlers.GetTrending)
+    r.GET("/products/detail/:id", handlers.GetProductDetail)
 
-	r := gin.Default()
-
-	// CORS Ayarları
-	r.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-		c.Next()
-	})
-
-	// --- ROTALAR ---
-	r.GET("/products/trending", handlers.GetTrending)
-	r.GET("/products/detail/:id", handlers.GetProductDetail)
-
-	authorized := r.Group("/")
-	authorized.Use(AuthMiddleware())
-	{
-		authorized.GET("/products/search", handlers.SearchProducts)
-		authorized.GET("/watchlist", handlers.GetWatchlist)
-		authorized.POST("/watchlist/add", handlers.AddToWatchlist)
-		authorized.DELETE("/watchlist/:id", handlers.DeleteFromWatchlist)
-		authorized.GET("/products/category", handlers.GetCategories)
-	}
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
-	fmt.Println("🚀 Sunucu hazır, Postman'i açabilirsin!")
-	r.Run(":" + port)
+    authorized := r.Group("/")
+    authorized.Use(AuthMiddleware())
+    {
+        authorized.GET("/products/search", handlers.SearchProducts)
+        authorized.GET("/watchlist", handlers.GetWatchlist)
+        authorized.POST("/watchlist/add", handlers.AddToWatchlist)
+        authorized.DELETE("/watchlist/:id", handlers.DeleteFromWatchlist)
+        authorized.GET("/products/category", handlers.GetCategories)
+    }
 }

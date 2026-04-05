@@ -8,8 +8,8 @@ import (
 	//"nisanur-sutcu/db"
 	//"nisanur-sutcu/models"
 	
-	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/db"
-	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/models"
+	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"
+	"github.com/ercanaziz/notiFY/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,14 +27,14 @@ func GetTrending(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Veriler alınamadı"})
 		return
 	}
-	var results []models.WatchlistItem = []models.WatchlistItem{}
+	var results []models.Watchlist = []models.Watchlist{}
 	cursor.All(ctx, &results)
 	c.JSON(http.StatusOK, results)
 }
 
 // 2. Add To Watchlist Fonksiyonu
 func AddToWatchlist(c *gin.Context) {
-	var item models.WatchlistItem
+	var item models.Watchlist
 	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(400, gin.H{"error": "Geçersiz veri"})
 		return
@@ -89,7 +89,7 @@ func SearchProducts(c *gin.Context) {
 	defer cancel()
 
 	cursor, _ := db.WatchlistCol.Find(ctx, filter)
-	var results []models.WatchlistItem = []models.WatchlistItem{}
+	var results []models.Watchlist = []models.Watchlist{}
 	cursor.All(ctx, &results)
 	c.JSON(200, results)
 }
@@ -105,7 +105,7 @@ func GetProductDetail(c *gin.Context) {
 	filter := bson.M{"_id": objectID}
 	update := bson.M{"$inc": bson.M{"watch_count": 1}}
 
-	var updatedItem models.WatchlistItem
+	var updatedItem models.Watchlist
 	err := db.WatchlistCol.FindOneAndUpdate(
 		ctx,
 		filter,
@@ -149,7 +149,7 @@ func GetWatchlist(c *gin.Context) {
 		return
 	}
 
-	var results []models.WatchlistItem = []models.WatchlistItem{}
+	var results []models.Watchlist = []models.Watchlist{}
 	cursor.All(ctx, &results)
 	c.JSON(http.StatusOK, results)
 }
