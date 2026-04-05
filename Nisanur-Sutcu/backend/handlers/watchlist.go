@@ -10,14 +10,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // 1. Trending Fonksiyonu
 func GetTrending(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	findOptions := options.Find().SetSort(bson.D{{Key: "watch_count", Value: -1}}).SetLimit(10)
+	cursor, err := db.WatchlistCol.Find(ctx, bson.M{}, findOptions)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Veriler alınamadı"})
+		return
+	}
 	var results []models.WatchlistItem = []models.WatchlistItem{}
-	cursor, _ := db.WatchlistCol.Find(ctx, bson.M{})
 	cursor.All(ctx, &results)
 	c.JSON(http.StatusOK, results)
 }
@@ -41,12 +47,28 @@ func AddToWatchlist(c *gin.Context) {
 // 3. Delete Fonksiyonu
 func DeleteFromWatchlist(c *gin.Context) {
 	idParam := c.Param("id")
-	objectID, _ := primitive.ObjectIDFromHex(idParam)
+	objectID, err := primitive.ObjectIDFromHex(idParam)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Geçersiz ID formatı!"})
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
 	filter := bson.M{"_id": objectID}
-	db.WatchlistCol.DeleteOne(ctx, filter)
-	c.JSON(200, gin.H{"message": "Silindi"})
+
+	res, err := db.WatchlistCol.DeleteOne(ctx, filter)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Veritabanı hatası oluştu"})
+		return
+	}
+
+	if res.DeletedCount == 0 {
+		c.JSON(404, gin.H{"message": "Silinecek ürün bulunamadı. ID doğru mu?"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "Ürün başarıyla silindi"})
 }
 
 // 4. Arama Fonksiyonu (Kullanıcıya özel arama yapar)
@@ -110,7 +132,6 @@ func GetCategories(c *gin.Context) {
 	c.JSON(200, gin.H{"categories": categories})
 }
 
-
 // 7. Takip Listesini Görüntüle (Kullanıcıya özel)
 func GetWatchlist(c *gin.Context) {
 	userID := c.MustGet("user_id").(string)
@@ -123,7 +144,7 @@ func GetWatchlist(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Liste alınamadı"})
 		return
 	}
-	
+
 	var results []models.WatchlistItem = []models.WatchlistItem{}
 	cursor.All(ctx, &results)
 	c.JSON(http.StatusOK, results)
