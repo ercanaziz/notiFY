@@ -6,15 +6,14 @@ import (
 	"net/http"
 	"time"
 
-	"price-tracker/db"
-	"price-tracker/middleware"
-	"price-tracker/models"
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/db"
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/middleware"
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/models"
 
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
+    "github.com/gin-gonic/gin"
+    "github.com/golang-jwt/jwt/v5"
+    "go.mongodb.org/mongo-driver/bson"
+    "go.mongodb.org/mongo-driver/bson/primitive" )
 
 // Register - Yeni kullanıcı kaydı
 func Register(c *gin.Context) {

@@ -4,8 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"price-tracker/handlers"
-	"price-tracker/middleware"
+	
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/handlers"
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/middleware"
 
 	"github.com/gin-gonic/gin"
 )
