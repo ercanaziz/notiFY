@@ -20,7 +20,6 @@ Nisanur Sütcü
 
 
 Nisanur Sütcü - REST API Metotları
-**API Test Videosu:** https://youtu.be/HEHiOFrZV0k
 
 ## 1. Ürün Arama
 - **Endpoint:** `GET /products/search`
