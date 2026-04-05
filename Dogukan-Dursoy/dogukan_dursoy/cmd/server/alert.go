@@ -22,7 +22,6 @@ import (
 var Client *mongo.Client
 
 func Start() {
-	// 1. MONGODB'YE BAĞLAN
 	uri := "mongodb+srv://teamnotify:notiFY@test.ek07wik.mongodb.net/?appName=test"
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -37,13 +36,13 @@ func Start() {
 		log.Fatal("❌ MongoDB'ye ping atılamadı: ", err)
 	}
 
+	Client = client
+
 	fmt.Println("✅ MongoDB bağlantısı başarılı!")
 
-	// 2. VERİTABANLARINI SEÇ
-	dbAlarms := client.Database("price_tracker_db")
-	dbUsers := client.Database("notiFY_DB")
+	dbAlarms := Client.Database("price_tracker_db")
+	dbUsers := Client.Database("notiFY_DB")
 
-	// 3. KATMANLARI VE SERVİSLERİ BAĞLA
 	repo := alarm.NewAlarmRepository(dbAlarms.Collection("alerts"))
 
 	emailSvc := notification.NewEmailService(
@@ -53,11 +52,6 @@ func Start() {
 		"vctxxnhuknyvnjno",
 	)
 
-	svc := alarm.NewAlarmService(repo)
-	hdl := alarm.NewAlarmHandler(svc)
-	authHdl := auth.NewAuthHandler(dbUsers.Collection("users"))
-
-	// 4. ARKA PLAN MOTORU (ARTIK DİNAMİK)
 	go func() {
 		fmt.Println("🤖 Akıllı Fiyat Takip Motoru başlatıldı...")
 		for {
@@ -74,17 +68,14 @@ func Start() {
 					if currentMarketPrice <= alert.TargetPrice {
 						fmt.Printf("🔥 %s tetiklendi! Kullanıcı aranıyor: %s\n", alert.ProductID, alert.UserID)
 
-						// --- KRİTİK: Kullanıcının gerçek mailini Betül'ün tablosundan çekiyoruz ---
 						var foundUser bson.M
 						userObjID, _ := primitive.ObjectIDFromHex(alert.UserID)
 
-						// Arka planda timeout olmaması için yeni bir context kullanıyoruz
 						userCtx, userCancel := context.WithTimeout(context.Background(), 5*time.Second)
-
 						err := dbUsers.Collection("users").FindOne(userCtx, bson.M{"_id": userObjID}).Decode(&foundUser)
 						userCancel()
 
-						targetEmail := "dursoydogukan@gmail.com" // Hata olursa sana gelsin (yedek)
+						targetEmail := "dursoydogukan@gmail.com"
 						if err == nil && foundUser["email"] != nil {
 							targetEmail = foundUser["email"].(string)
 						}
@@ -102,28 +93,6 @@ func Start() {
 			time.Sleep(1 * time.Minute)
 		}
 	}()
-
-	// 5. GIN ROUTER VE YOLLAR
-	r := gin.Default()
-
-	// Public
-	r.POST("/register", authHdl.Register)
-	r.POST("/login", authHdl.Login)
-
-	// Protected (JWT Middleware devrede)
-	protected := r.Group("/alerts")
-	protected.Use(auth.AuthMiddleware())
-	{
-		protected.POST("/", hdl.CreatePriceAlert)
-		protected.GET("/active", hdl.ListActiveAlerts)
-		protected.DELETE("/:id", hdl.DeleteAlert)
-		protected.PATCH("/:id", hdl.UpdateAlert)
-	}
-
-	r.POST("/notify/email", hdl.NotifyEmail)
-	r.POST("/notify/push", hdl.NotifyPush)
-
-	fmt.Println("🚀 Sistem hazır! Artık herkesin alarmı kendi mailine gidiyor...")
 }
 func RegisterRoutes(r *gin.Engine) {
 	dbAlarms := Client.Database("price_tracker_db")
