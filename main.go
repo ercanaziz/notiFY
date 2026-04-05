@@ -3,8 +3,6 @@ package main
 import (
 	"os"
 
-	login "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend"
-	alert "github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy/cmd/server"
 	product "github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend"
 	productDB "github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"
 
@@ -20,15 +18,11 @@ func main() {
 	backendDB.Connect()
 	historyDB.Connect()
 	productDB.Connect()
-	login.Start()
-	alert.Start()
 
 	r := gin.Default()
 	backendRouter.RegisterRoutes(r)
 	history.RegisterRoutes(r)
 	product.RegisterRoutes(r)
-	login.RegisterRoutes(r)
-	alert.RegisterRoutes(r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
