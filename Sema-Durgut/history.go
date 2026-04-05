@@ -36,7 +36,18 @@ func Start() {
 	}
 	r.Run(":" + port)
 }
-
+func RegisterRoutes(r *gin.Engine) {
+	products := r.Group("/products")
+	{
+		products.GET("/:id/history", analysis.GetPriceHistory)
+		products.GET("/:id/chart-data", analysis.GetChartData)
+		products.GET("/:id/lowest-price", analysis.GetLowestPrice)
+		products.GET("/compare", analysis.CompareStores)
+		products.GET("/:id/discount-rate", analysis.GetDiscountRate)
+		products.GET("/:id/forecast", analysis.GetForecast)
+		products.GET("/filter", analysis.FilterByColor)
+	}
+}
 /* Küçük ama hayati bir ipucu: Ana projeye kodları geçirirken, kendi test
 klasöründeki go.mod ve go.sum dosyalarını ana projeye kopyalama. Ortak
 projenin zaten kendine ait bir go.mod dosyası olacaktır. Sen .go
