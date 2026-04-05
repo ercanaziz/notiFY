@@ -5,8 +5,13 @@ import (
 	"os"
 	"strings"
 
-	"nisanur-sutcu/db"       // Kendi modül adın
-	"nisanur-sutcu/handlers" // Yazdığın fonksiyonlar
+
+	
+	//"nisanur-sutcu/db"
+	//"nisanur-sutcu/models" 
+	
+	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/db"  
+	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

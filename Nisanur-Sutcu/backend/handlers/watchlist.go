@@ -3,9 +3,13 @@ package handlers
 import (
 	"context"
 	"net/http"
-	"nisanur-sutcu/db"     // Veritabanına erişmek için
-	"nisanur-sutcu/models" // Modellerine erişmek için
 	"time"
+
+	//"nisanur-sutcu/db"
+	//"nisanur-sutcu/models"
+	
+	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/db"
+	"github.com/ercanaziz/notiFY/nisanur-sutcu/backend/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
