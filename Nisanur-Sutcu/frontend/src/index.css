@@ -1,0 +1,271 @@
+:root {
+  --primary: #0071e3;
+  --bg: #ffffff;
+  --gray: #f5f5f7;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, sans-serif;
+  background: var(--bg);
+  color: #1d1d1f;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.search-box input {
+  padding: 12px;
+  width: 300px;
+  border-radius: 10px;
+  border: 1px solid #d2d2d7;
+  outline: none;
+}
+
+.search-box button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 300px;
+  gap: 30px;
+}
+
+.sidebar,
+.watchlist-panel {
+  background: var(--gray);
+  padding: 20px;
+  border-radius: 18px;
+  height: fit-content;
+}
+
+.category-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 15px;
+  background: white;
+  transition: 0.3s;
+  display: flex;
+  flexDirection: column;
+  justifyContent: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.add-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.watchlist-item {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.del-btn {
+  background: none;
+  border: none;
+  color: #ff3b30;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+:root {
+  --primary: #0071e3;
+  --bg: #ffffff;
+  --gray: #f5f5f7;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, sans-serif;
+  background: var(--bg);
+  color: #1d1d1f;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.search-box input {
+  padding: 12px;
+  width: 300px;
+  border-radius: 10px;
+  border: 1px solid #d2d2d7;
+  outline: none;
+}
+
+.search-box button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 300px;
+  gap: 30px;
+}
+
+.sidebar,
+.watchlist-panel {
+  background: var(--gray);
+  padding: 20px;
+  border-radius: 18px;
+  height: fit-content;
+}
+
+.category-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 15px;
+  background: white;
+  transition: 0.3s;
+  display: flex;
+  flexDirection: column;
+  justifyContent: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.add-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.watchlist-item {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.del-btn {
+  background: none;
+  border: none;
+  color: #ff3b30;
+  cursor: pointer;
+  font-weight: bold;
+}
