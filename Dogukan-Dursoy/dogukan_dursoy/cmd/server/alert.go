@@ -109,7 +109,7 @@ func RegisterRoutes(r *gin.Engine) {
 	protected := r.Group("/alerts")
 	protected.Use(auth.AuthMiddleware())
 	{
-		protected.POST("/", hdl.CreatePriceAlert)
+		protected.POST("", hdl.CreatePriceAlert)
 		protected.GET("/active", hdl.ListActiveAlerts)
 		protected.DELETE("/:id", hdl.DeleteAlert)
 		protected.PATCH("/:id", hdl.UpdateAlert)
