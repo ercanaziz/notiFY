@@ -3,11 +3,11 @@ package login
 import (
 	"fmt"
 	"log"
+
 	"github.com/gin-gonic/gin"
-    
-    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/router"
-    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/db"
-    
+
+	"github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/db"
+	"github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/router"
 )
 
 func Start() {
@@ -21,7 +21,6 @@ func Start() {
 	}
 }
 
-
 func RegisterRoutes(r *gin.Engine) {
-    router.SetupRouter(r)  // eğer SetupRouter *gin.Engine alacak şekilde değiştirirsen
+	router.RegisterRoutes(r) // eğer SetupRouter *gin.Engine alacak şekilde değiştirirsen
 }
