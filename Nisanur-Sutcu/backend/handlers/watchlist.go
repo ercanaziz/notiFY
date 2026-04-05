@@ -7,7 +7,7 @@ import (
 
 	//"nisanur-sutcu/db"
 	//"nisanur-sutcu/models"
-	
+
 	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"
 	"github.com/ercanaziz/notiFY/models"
 

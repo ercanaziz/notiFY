@@ -1,4 +1,4 @@
-package main
+package alert
 
 import (
 	"context"
@@ -18,8 +18,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+var Client *mongo.Client
 
-func main() {
+func Start() {
 	// 1. MONGODB'YE BAĞLAN
 	uri := "mongodb+srv://teamnotify:notiFY@test.ek07wik.mongodb.net/?appName=test"
 
@@ -123,4 +124,28 @@ func main() {
 
 	fmt.Println("🚀 Sistem hazır! Artık herkesin alarmı kendi mailine gidiyor...")
 	r.Run(":8080")
+}
+func RegisterRoutes(r *gin.Engine) {
+    dbAlarms := Client.Database("price_tracker_db")
+    dbUsers := Client.Database("notiFY_DB")
+
+    repo := alarm.NewAlarmRepository(dbAlarms.Collection("alerts"))
+    svc := alarm.NewAlarmService(repo)
+    hdl := alarm.NewAlarmHandler(svc)
+    authHdl := auth.NewAuthHandler(dbUsers.Collection("users"))
+
+    r.POST("/register", authHdl.Register)
+    r.POST("/login", authHdl.Login)
+
+    protected := r.Group("/alerts")
+    protected.Use(auth.AuthMiddleware())
+    {
+        protected.POST("/", hdl.CreatePriceAlert)
+        protected.GET("/active", hdl.ListActiveAlerts)
+        protected.DELETE("/:id", hdl.DeleteAlert)
+        protected.PATCH("/:id", hdl.UpdateAlert)
+    }
+
+    r.POST("/notify/email", hdl.NotifyEmail)
+    r.POST("/notify/push", hdl.NotifyPush)
 }

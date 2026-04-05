@@ -3,15 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-
+    
+    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/router"
     "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/db"
-    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/models"
-    "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/middleware"
-
-    "github.com/gin-gonic/gin"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/bson/primitive"
-    "go.mongodb.org/mongo-driver/mongo/options"
+    
 )
 
 func main() {

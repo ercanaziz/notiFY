@@ -9,7 +9,7 @@ import (
 	//"nisanur-sutcu/models" 
 	
 	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"  
-	"github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/handlers"
+	handlers "github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/handlers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
