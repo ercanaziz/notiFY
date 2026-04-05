@@ -4,7 +4,7 @@ import (
 	"os"
 
 	login "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend"
-	alert "github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy"
+	alert "github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy/cmd/server"
 	product "github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend"
 	productDB "github.com/ercanaziz/notiFY/Nisanur-Sutcu/backend/db"
 
