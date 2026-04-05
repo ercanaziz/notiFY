@@ -1,3 +1,5 @@
+**postman youtube videosu:** https://youtu.be/JSq8MskZW2Q
+
 # Betül Erkoç — REST API Görevleri
 
 ## 1. Kayıt Olma
