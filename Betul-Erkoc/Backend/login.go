@@ -1,15 +1,16 @@
-package main
+package login
 
 import (
 	"fmt"
 	"log"
+	"github.com/gin-gonic/gin"
     
     "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/router"
     "github.com/ercanaziz/notiFY/Betul-Erkoc/Backend/db"
     
 )
 
-func main() {
+func Start() {
 	db.InitDB()
 
 	r := router.SetupRouter()
@@ -18,4 +19,9 @@ func main() {
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Sunucu başlatılamadı: ", err)
 	}
+}
+
+
+func RegisterRoutes(r *gin.Engine) {
+    router.SetupRouter(r)  // eğer SetupRouter *gin.Engine alacak şekilde değiştirirsen
 }
