@@ -2,16 +2,19 @@ package main
 
 import (
 	"context"
-	"fiyat-takip/auth"
-	"fiyat-takip/internal/alarm"
-	"fiyat-takip/internal/notification"
 	"fmt"
 	"log"
 	"time"
 
+	// Kendi paketlerin (Yeni modül ismine göre güncellendi)
+	"github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy/auth"
+	"github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy/internal/alarm"
+	"github.com/ercanaziz/notiFY/Dogukan-Dursoy/dogukan_dursoy/internal/notification"
+
+	// Dış kütüphaneler
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"           // 👈 Eklendi
-	"go.mongodb.org/mongo-driver/bson/primitive" // 👈 Eklendi
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
