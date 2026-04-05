@@ -1,8 +1,8 @@
 package router
 
 import (
-	"notify-api/handlers"
-	"notify-api/middleware"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/handlers"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

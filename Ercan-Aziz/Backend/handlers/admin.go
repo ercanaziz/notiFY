@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"notify-api/db"
-	"notify-api/models"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/db"
+	"github.com/ercanaziz/notiFY/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"

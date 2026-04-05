@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"notify-api/db"
-	"notify-api/models"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/db"
+	"github.com/ercanaziz/notiFY/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -38,13 +38,13 @@ func GetCategories(c *gin.Context) {
 		return
 	}
 
-	var results []models.Product
+	var results []models.Watchlist
 	if err = cursor.All(ctx, &results); err != nil {
 		c.JSON(500, gin.H{"error": "Sonuçlar okunamadı!"})
 		return
 	}
 	if results == nil {
-		results = []models.Product{}
+		results = []models.Watchlist{}
 	}
 	c.JSON(200, gin.H{"products": results, "total": len(results)})
 }
@@ -90,13 +90,13 @@ func GetProducts(c *gin.Context) {
 		return
 	}
 
-	var results []models.Product
+	var results []models.Watchlist
 	if err = cursor.All(ctx, &results); err != nil {
 		c.JSON(500, gin.H{"error": "Sonuçlar okunamadı!"})
 		return
 	}
 	if results == nil {
-		results = []models.Product{}
+		results = []models.Watchlist{}
 	}
 	c.JSON(200, gin.H{"products": results, "total": len(results)})
 }

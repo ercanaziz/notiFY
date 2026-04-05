@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"Ercan-Aziz/Backend/db"
-	"Ercan-Aziz/Backend/router"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/db"
+	"github.com/ercanaziz/notiFY/Ercan-Aziz/Backend/router"
 )
 
 func Start() {
