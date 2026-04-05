@@ -1,12 +1,12 @@
-package main
+package history
 
 import (
+	"github.com/ercanaziz/notiFY/Sema-Durgut/analysis"
+	"github.com/ercanaziz/notiFY/Sema-Durgut/db"
 	"github.com/gin-gonic/gin"
-	"notiFY/Sema-Durgut/analysis"
-	"notiFY/Sema-Durgut/db"
 )
 
-func main() {
+func Start() {
 	// 1. Veritabanına (MongoDB Atlas) bağlan
 	db.Connect()
 	// db.Migrate() sildik! MongoDB'de buna gerek yok.

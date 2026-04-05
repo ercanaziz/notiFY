@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/ercanaziz/notiFY/models" // Modellerin bulunduğu paket eklendi
 	"github.com/gin-gonic/gin"
 	"math"
 	"net/http"
-	"notiFY/models" // Modellerin bulunduğu paket eklendi
 )
 
 // GET /products/:id/history

@@ -2,8 +2,8 @@ package analysis
 
 import (
 	"context"
-	"notiFY/Sema-Durgut/db" // Veritabanı bağlantısı
-	"notiFY/models"         // Modellerin bulunduğu paket eklendi
+	"github.com/ercanaziz/notiFY/Sema-Durgut/db" // Veritabanı bağlantısı
+	"github.com/ercanaziz/notiFY/models"         // Modellerin bulunduğu paket eklendi
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
