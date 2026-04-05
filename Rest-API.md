@@ -148,7 +148,7 @@ Nisanur Sütcü
 **Yanıtlar:**
 - `200` → Başarıyla çıkış yapıldı
 - `401` → Yetkisiz erişim
-# Betül Erkoç — REST API Görevleri
+
 
 
 Nisanur Sütcü - REST API Metotları
