@@ -20,8 +20,8 @@ func main() {
 	backendDB.Connect()
 	historyDB.Connect()
 	productDB.Connect()
-	go login.Start()
-	go alert.Start()
+	login.Start()
+	alert.Start()
 
 	r := gin.Default()
 	backendRouter.RegisterRoutes(r)
