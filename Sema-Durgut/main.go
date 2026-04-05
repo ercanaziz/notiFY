@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"test_notify/analysis" // Kendi modül adın
-	"test_notify/db"       // Kendi modül adın
+	"notiFY/Sema-Durgut/analysis"
+	"notiFY/Sema-Durgut/db"
 )
 
 func main() {
