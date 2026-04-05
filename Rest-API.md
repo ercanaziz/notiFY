@@ -18,6 +18,138 @@ Nisanur Sütcü
 
 - **Hata Yönetimi (Error Handling):** Geçersiz ID formatları, bulunamayan kayıtlar (404) ve veritabanı hataları için özelleştirilmiş JSON hata mesajları ve HTTP statü kodlarını yapılandırdım.
 
+- # Betül Erkoç
+
+**Gereksinim Analizi ve Kullanıcı Hikayelerinin Oluşturulması:** Sisteme kayıt olma, giriş yapma, profil güncelleme, şifre değiştirme, hesap silme ve çıkış yapma olmak üzere 6 temel kullanıcı gereksinimini belirleyerek her biri için API metodunu, açıklamasını ve kapsamını tanımladım.
+
+**API Endpoint Tasarımı:** RESTful mimari prensiplerine uygun olarak `POST /auth/register`, `POST /auth/login`, `PUT /user/profile`, `PATCH /user/password`, `DELETE /user/profile` ve `POST /auth/logout` endpoint'lerini tasarlayarak her birinin HTTP metodunu, yolunu ve işlevsel sorumluluğunu belirledim.
+
+**OpenAPI (YAML) Şema Dokümantasyonu:** Tüm endpoint'lerin istek gövdelerini (request body), başarılı ve hatalı yanıt kodlarını (200, 201, 204, 400, 401) ve operasyon kimliklerini (operationId) kapsayan eksiksiz bir OpenAPI spesifikasyonu oluşturdum.
+
+**Veri Modelleme ve Şema Tasarımı:** `RegisterInput`, `LoginInput`, `ProfileUpdateInput`, `PasswordUpdateInput`, `User` ve `Error` olmak üzere 6 adet bileşen şeması (component schema) tasarladım; her alan için veri tipi, format, zorunluluk durumu, açıklama ve örnek değerleri tanımladım.
+
+**Güvenlik Şeması Tanımı:** JWT tabanlı kimlik doğrulama için `BearerAuth` güvenlik şemasını `components/securitySchemes` altında tanımladım; kimlik doğrulama gerektirmeyen endpoint'leri (`security: []`) ile korumalı endpoint'leri ayrıştırarak yetkilendirme katmanını yapılandırdım.
+
+**İletişim Tercihleri Veri Yapısı:** Profil güncelleme şeması kapsamında kullanıcıya ait `newsletter` ve `smsNotifications` alanlarını barındıran iç içe `communicationPreferences` nesnesini modelledim.
+
+**Hata Yanıtı Standardizasyonu:** Tüm hatalı isteklere tutarlı bir yapı sunmak amacıyla `message` ve `code` alanlarından oluşan merkezi `Error` şemasını tasarlayarak ilgili endpoint'lerde `$ref` ile referans gösterdim.
+
+
+
+# Betül Erkoç — REST API Görevleri
+
+## 1. Kayıt Olma
+**API Metodu:** `POST /auth/register`
+
+**Açıklama:** Kullanıcıların e-posta ve şifre ile sisteme yeni hesap tanımlamasını sağlar.
+
+**Request Body:**
+```json
+{
+  "email": "betul.erkoc@example.com",
+  "password": "Suleyman123!",
+  "firstName": "Betül",
+  "lastName": "Erkoç"
+}
+```
+
+**Yanıtlar:**
+- `201` → Kullanıcı başarıyla oluşturuldu
+- `400` → Geçersiz veri girişi
+
+---
+
+## 2. Giriş Yapma
+**API Metodu:** `POST /auth/login`
+
+**Açıklama:** Kayıtlı kullanıcıların kimlik doğrulamasını yaparak sistem erişim izni almasını sağlar.
+
+**Request Body:**
+```json
+{
+  "email": "betul.erkoc@example.com",
+  "password": "Suleyman123!"
+}
+```
+
+**Yanıtlar:**
+- `200` → Giriş başarılı, JWT token döner
+- `401` → E-posta veya şifre hatalı
+
+---
+
+## 3. Profil Güncelleme
+**API Metodu:** `PUT /user/profile`
+
+**Açıklama:** Kullanıcının ad, soyad ve iletişim tercihlerini düzenlemesine olanak tanır.
+
+**Yetkilendirme:** `Bearer Token` gereklidir.
+
+**Request Body:**
+```json
+{
+  "firstName": "Betül",
+  "lastName": "Erkoç",
+  "communicationPreferences": {
+    "newsletter": true,
+    "smsNotifications": false
+  }
+}
+```
+
+**Yanıtlar:**
+- `200` → Profil başarıyla güncellendi
+- `401` → Yetkisiz erişim
+
+---
+
+## 4. Şifre Değiştirme
+**API Metodu:** `PATCH /user/password`
+
+**Açıklama:** Mevcut kullanıcının güvenliği için şifresini yenilemesini sağlar.
+
+**Yetkilendirme:** `Bearer Token` gereklidir.
+
+**Request Body:**
+```json
+{
+  "oldPassword": "Suleyman123!",
+  "newPassword": "YeniGucluSifre2026!"
+}
+```
+
+**Yanıtlar:**
+- `200` → Şifre başarıyla güncellendi
+- `400` → Geçersiz veri
+- `401` → Yetkisiz erişim
+
+---
+
+## 5. Hesap Silme
+**API Metodu:** `DELETE /user/profile`
+
+**Açıklama:** Kullanıcının tüm hesap verilerini ve tercihlerini sistemden kalıcı olarak kaldırır.
+
+**Yetkilendirme:** `Bearer Token` gereklidir.
+
+**Yanıtlar:**
+- `204` → Kullanıcı hesabı kalıcı olarak silindi
+- `401` → Yetkisiz erişim
+
+---
+
+## 6. Çıkış Yapma
+**API Metodu:** `POST /auth/logout`
+
+**Açıklama:** Aktif kullanıcı oturumunu sonlandırarak güvenli çıkış yapılmasını sağlar.
+
+**Yetkilendirme:** `Bearer Token` gereklidir.
+
+**Yanıtlar:**
+- `200` → Başarıyla çıkış yapıldı
+- `401` → Yetkisiz erişim
+# Betül Erkoç — REST API Görevleri
+
 
 Nisanur Sütcü - REST API Metotları
 
